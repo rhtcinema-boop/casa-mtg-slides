@@ -1,0 +1,365 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11/19 札幌mtg</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#0F1613;overflow:hidden;font-family:'Noto Sans JP','Hiragino Sans',sans-serif;}
+body{counter-reset:page;}
+p,h1,h2,h3{margin:0;} table{border-collapse:collapse;}
+x-shape{display:block;clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%);}
+x-icon{display:block;border-radius:50%;background:currentColor;}
+#deck{position:fixed;inset:0;}
+.frame{position:absolute;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .35s ease;}
+.frame.on{opacity:1;pointer-events:auto;}
+.frame section{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;}
+body.grid{overflow:auto;}
+body.grid #deck{position:static;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:16px;}
+body.grid .frame{position:relative;opacity:1;pointer-events:auto;aspect-ratio:16/9;border-radius:10px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+.on section .card,.on section .row,.on section .step,.on section .bar{animation:rise 450ms ease-out both;}
+#hud{position:fixed;right:16px;bottom:14px;display:flex;gap:8px;align-items:center;color:#A9B5AE;font-size:14px;opacity:.0;transition:opacity .3s;}
+body:hover #hud,#hud.show{opacity:1;}
+#hud button{background:#1F3329;color:#F3EEE2;border:0;border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer;}
+#bar{position:fixed;left:0;bottom:0;height:3px;background:#C8922E;transition:width .3s;}
+body.grid #bar{display:none;}
+section { counter-increment: page; box-sizing: border-box; padding: 128px 128px 160px; background: #F6F3EC; color: #1C2B27; font-family: 'Noto Sans JP', 'Hiragino Sans', Arial, sans-serif; display: flex; flex-direction: column; gap: 32px; }
+section.dark { background: #16261F; color: #F3EEE2; }
+section.gold { background: #E2B04A; color: #1C2B27; }
+section.center { justify-content: center; }
+
+.eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 3px; color: #8C5E12; }
+.dark .eyebrow { color: #E2B04A; }
+.gold .eyebrow { color: #4A3208; }
+h1 { font-size: 120px; font-weight: 900; line-height: 1.15; }
+h2 { font-size: 64px; font-weight: 900; line-height: 1.25; }
+h3 { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.lead { font-size: 44px; font-weight: 700; line-height: 1.4; }
+.dark .lead { color: #E2B04A; }
+.sub { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.dark .sub { color: #BFCBC4; }
+.sub b { color: #1C2B27; }
+
+.foot { position: absolute; left: 128px; top: 952px; width: 1300px; font-size: 24px; color: #5E6863; }
+.pg { position: absolute; left: 1592px; top: 952px; width: 200px; font-size: 24px; color: #5E6863; text-align: right; font-family: 'Space Grotesk', Arial, sans-serif; }
+.pg::before { content: counter(page); }
+.dark .foot { color: #A9B5AE; }
+.dark .pg { color: #A9B5AE; }
+.gold .foot { color: #4A3208; }
+.gold .pg { color: #4A3208; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.card { background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 36px 40px; display: flex; flex-direction: column; gap: 14px; }
+.card.hi { border: 4px solid #C8922E; }
+.card.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.card .lbl { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.card.dk .lbl { color: #E2B04A; }
+.card .txt { font-size: 32px; line-height: 1.5; }
+.card .note { font-size: 24px; line-height: 1.5; color: #5E6863; }
+.card.dk .note { color: #BFCBC4; }
+
+.numrow { display: flex; align-items: flex-end; gap: 12px; }
+.num { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; }
+.unit { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.mid { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 64px; font-weight: 700; line-height: 1.1; }
+.arr { width: 56px; height: 28px; background: #C8922E; flex: none; }
+.numrow .arr { margin-bottom: 24px; }
+
+.rows { display: flex; flex-direction: column; }
+.row { display: flex; gap: 36px; align-items: flex-start; padding: 22px 0; border-top: 2px solid #DDD4C2; }
+.row .no { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; color: #8C5E12; width: 80px; line-height: 1.3; }
+.row .body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.row .t { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.row .s { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.gold .row { border-top: 2px solid #B9862C; }
+.gold .row .no { color: #4A3208; }
+.gold .row .s { color: #3A2A0A; }
+
+.kvs { display: flex; flex-direction: column; gap: 10px; }
+.kv { display: flex; gap: 24px; align-items: flex-start; }
+.kv .k { width: 130px; flex: none; font-size: 24px; font-weight: 700; color: #8C5E12; line-height: 2; }
+.kv .v { flex: 1; font-size: 32px; line-height: 1.5; }
+
+.tag { align-self: flex-start; font-size: 24px; font-weight: 700; background: #F1DDB0; color: #5C3B06; padding: 6px 20px; border-radius: 40px; }
+.tag.warn { background: #F5D3C6; color: #7A2A10; }
+
+.flow { display: flex; align-items: center; gap: 20px; }
+.step { flex: 1; background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 32px 36px; display: flex; flex-direction: column; gap: 10px; }
+.step.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.step .lbl { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.step.dk .lbl { color: #E2B04A; }
+.step .txt { font-size: 32px; line-height: 1.5; font-weight: 700; }
+
+.quote { font-size: 44px; font-weight: 700; line-height: 1.45; border-left: 8px solid #C8922E; padding-left: 36px; }
+
+.bars { display: flex; flex-direction: column; gap: 24px; }
+.bar { display: flex; align-items: center; gap: 32px; }
+.bar .name { width: 280px; flex: none; font-size: 32px; font-weight: 700; }
+.bar .track { flex: 1; height: 64px; background: #E6DFD0; border-radius: 12px; overflow: hidden; display: flex; }
+.bar .fill { height: 64px; background: #16261F; }
+.bar .fill.g { background: #C8922E; }
+.bar .val { width: 220px; flex: none; font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 44px; font-weight: 700; text-align: right; }
+
+table { width: 100%; font-size: 32px; color: #1C2B27; }
+th { color: #F3EEE2; padding: 16px 24px; }
+td { padding: 16px 24px; }
+tr.hd { background: #16261F; }
+tr.z { background: #EFE8D9; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0px); } }
+.card { animation: rise 450ms ease-out both; }
+.row { animation: rise 450ms ease-out both; }
+.step { animation: rise 450ms ease-out both; }
+.bar { animation: rise 450ms ease-out both; }
+
+.tag.ok { background: #D7E9DC; color: #1F5A3A; }
+.tag.open { background: #F7E7C2; color: #5C3B06; }
+.gold .tag.open { background: #F6EBCF; color: #4A3208; }
+.row .tag { margin-top: 10px; flex: none; }
+.cols.top { align-items: start; }
+.alert { display: flex; align-items: center; gap: 24px; background: #F5D3C6; color: #7A2A10; border-radius: 20px; padding: 24px 32px; }
+.alert .ic { width: 40px; height: 40px; color: #7A2A10; flex: none; }
+.alert .at { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.today { color: #1F6B45; }
+.later { color: #9A5B00; }
+.card.mute { background: #EFEBE2; border: 2px solid #E3DBCA; }
+
+</style></head><body>
+<div id="deck"><div class="frame"><section id="b-cover" class="dark center" data-transition="fade">
+<p class="eyebrow">2026.11.19 ／ ZOOM 定例</p>
+<h1>札幌ミーティング</h1>
+<p class="lead">今月はアミュリンに全力。リングは人と仕組みで立てる</p>
+<p class="sub">上村さん・神崎・かずき君　13:33〜14:27</p>
+
+</section>
+</div><div class="frame"><section id="b-dec" data-transition="fade">
+<p class="eyebrow">決まったこと</p>
+<h2>今日決まった4つ</h2>
+<div class="rows">
+<div class="row"><p class="no">01</p><div class="body"><p class="t">今月はアミューズリングに全力</p><p class="s">リングのポイント施策は12月から検討</p></div><p class="tag ok">決定</p></div>
+<div class="row"><p class="no">02</p><div class="body"><p class="t">エントランス無料＋アルコール飲み放題</p><p class="s">12月末まで</p></div><p class="tag ok">決定</p></div>
+<div class="row"><p class="no">03</p><div class="body"><p class="t">アミュリン上位への選手契約は続けない</p><p class="s">最初のブースト期間だけOK。結果は12月末で判断</p></div><p class="tag ok">決定</p></div>
+<div class="row"><p class="no">04</p><div class="body"><p class="t">時給案は12月から</p><p class="s">スタッフにはもう話し始める</p></div><p class="tag ok">決定</p></div>
+</div>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+</section>
+</div><div class="frame"><section id="b-week" data-transition="fade">
+<p class="eyebrow">今週の数字</p>
+<h2>トナメが伸び、固定費ラインを初めて超えた</h2>
+<div class="cols3">
+<div class="card dk"><p class="lbl">今週のトータル</p><div class="numrow"><p class="num">+48.9</p><p class="unit">万円</p></div><p class="note">トーナメントが大きく伸びた</p></div>
+<div class="card"><p class="lbl">固定費ライン</p><div class="numrow"><p class="num">初</p><p class="unit">超え</p></div><p class="note">固定費を賄うラインを今週初めて超えた</p></div>
+<div class="card"><p class="lbl">人件費負けの日</p><div class="numrow"><p class="num">−2</p><p class="unit">日</p></div><p class="note">人件費が利益を上回った日（先週比）</p></div>
+</div>
+<p class="sub">客足は戻りつつある（JOPTの影響か）　かずき君</p>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+
+</section>
+</div><div class="frame"><section id="b-gap" data-transition="fade">
+<p class="eyebrow">12月からの課題</p>
+<h2>残り月40万円＝1日1.3万円を上積みする</h2>
+<div class="flow">
+<div class="step"><p class="lbl">前提｜12月から</p><p class="txt">人件費が約40万円下がる</p></div>
+<x-shape kind="arrow-right" class="arr"></x-shape>
+<div class="step"><p class="lbl">残る必要利益</p><p class="txt">さらに約40万円が必要</p></div>
+<x-shape kind="arrow-right" class="arr"></x-shape>
+<div class="step dk"><p class="lbl">日割り目標</p><p class="txt">1日約1.3万円を上積み</p></div>
+</div>
+<div class="cols">
+<div class="card"><p class="lbl">手1　トナメ</p><p class="txt">リエントリーレートを入れる</p></div>
+<div class="card"><p class="lbl">手2　リング</p><p class="txt">経費が見える形で予算をかける</p><p class="note">1日1万円かけても月30万円</p></div>
+</div>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+
+</section>
+</div><div class="frame"><section id="b-tona" data-transition="fade">
+<p class="eyebrow">トナメの分析</p>
+<h2>利益が出ているのはゴールド</h2>
+<div class="bars">
+<div class="bar"><p class="name">ゴールド</p><div class="track"><div class="fill g" style="width:75%"></div></div><p class="val">約75%</p></div>
+<div class="bar"><p class="name">バブル</p><div class="track"><div class="fill" style="width:58%"></div></div><p class="val">約58%</p></div>
+</div>
+<p class="small">黒字率（黒字になった回の割合）。ほかのトナメはこれより低い</p>
+<div class="cols">
+<div class="card"><p class="lbl">10月の2部トナメ</p><div class="numrow"><p class="num">28</p><p class="unit">万円</p></div><p class="note">1日あたり約9000円。人件費を考えると圧迫している</p></div>
+<div class="card"><p class="lbl">差が出る理由</p><p class="txt">価格帯／プライズ傾斜／バウンティの有無</p><p class="note">この差を自分たちで理解して、トナメを作る</p></div>
+</div>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+
+</section>
+</div><div class="frame"><section id="b-ring" data-transition="fade">
+<p class="eyebrow">リングの現状</p>
+<h2>割引を減らし、利益は70万円から80万円の見込み</h2>
+<table>
+<tr class="hd"><th style="width:34%">月</th><th style="width:22%; text-align:right">売上</th><th style="width:22%; text-align:right">割引</th><th style="width:22%; text-align:right">利益</th></tr>
+<tr><td>10月（実績）</td><td style="text-align:right">約160万円</td><td style="text-align:right">約90万円</td><td style="text-align:right">約70万円</td></tr>
+<tr class="z"><td>11月（見込み・着地予想）</td><td style="text-align:right">約110万円</td><td style="text-align:right">約30万円</td><td style="text-align:right">約80万円</td></tr>
+</table>
+<div class="cols">
+<div class="card dk"><p class="lbl">課題</p><p class="txt">レーキがほとんど立たない日が約12日ある</p></div>
+<div class="card"><p class="lbl">神崎さん</p><p class="txt">施策に予算を回していい</p></div>
+</div>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+</section>
+</div><div class="frame"><section id="b-why" data-transition="fade">
+<p class="eyebrow">19〜21時</p>
+<h2>立たない理由は3つ。まず③を確かめる</h2>
+<div class="cols3">
+<div class="card"><p class="lbl">理由①</p><p class="txt">19時に間に合わない</p></div>
+<div class="card"><p class="lbl">理由②</p><p class="txt">打つ人がそもそも少ない</p></div>
+<div class="card hi"><p class="lbl">理由③　自分たちで直せる</p><p class="txt">来ても卓が始まらず、<br>特典がもらえない</p></div>
+</div>
+<div class="flow">
+<div class="step"><p class="lbl">まず</p><p class="txt">③を直して、立つか検証する</p></div>
+<x-shape kind="arrow-right" class="arr"></x-shape>
+<div class="step dk"><p class="lbl">それでも立たなければ</p><p class="txt">原因は①②。オープンを20時に、またはボーナスなしで21時から</p></div>
+</div>
+<p class="sub">19〜21時はほぼ稼げていない。保証を付けても痛くない（上村さん）</p>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+</section>
+</div><div class="frame"><section id="b-sentyaku" data-transition="fade">
+<p class="eyebrow">先着特典</p>
+<h2>ルールを決めて、迷わず渡せるようにする</h2>
+<div class="cols">
+<div class="card mute"><p class="lbl">いま</p>
+<div class="kvs">
+<div class="kv"><p class="k">設定</p><p class="v">1〜2番に500、3〜5番に300</p></div>
+<div class="kv"><p class="k">実態</p><p class="v">スタッフ込みの3人で立てていて、<br>特典はほぼ出ていない</p></div>
+<div class="kv"><p class="k">過去</p><p class="v">「先着にスタッフはおかしい」<br>「繰り上げでは？」の声</p></div>
+</div></div>
+<div class="card dk"><p class="lbl">変更案（上村さん）</p>
+<div class="kvs">
+<div class="kv"><p class="k">① 順番</p><p class="v">スタッフが入ったら<b>5番手扱い</b></p></div>
+<div class="kv"><p class="k">② 時間</p><p class="v">「1時間以内」を<b>40分</b>に</p></div>
+<div class="kv"><p class="k">③ 枠外</p><p class="v">外れた人にも<b>1000〜2000円</b></p></div>
+</div></div>
+</div>
+<p class="sub"><b>かずき君</b>　スタッフは特典なしでも入ってくれる。時給だけでいい</p>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+</section>
+</div><div class="frame"><section id="b-amu" data-transition="fade">
+<p class="eyebrow">アミューズリング</p>
+<h2>人が集まるアミュリンに集中する</h2>
+<div class="cols">
+<div class="card"><p class="lbl">コインリング</p><div class="numrow"><p class="mid">3〜5</p><p class="unit">人／日</p></div><p class="note">スタッフ抜きのアクティブ。立たない日もある</p></div>
+<div class="card dk"><p class="lbl">アミューズリング</p><div class="numrow"><p class="mid">10+</p><p class="unit">人／日</p></div><p class="note">他店も含めた平均。飲み屋のお客さんも誘いやすい</p></div>
+</div>
+<div class="cols3">
+<div class="card"><p class="lbl">設計</p><p class="txt">上位4〜5名にプライズ</p><p class="note">今は20BBキャップで上位に何もない</p></div>
+<div class="card"><p class="lbl">場所</p><p class="txt">VIPルームを飲み屋に</p><p class="note">カラオケのある部屋。ソファとテーブル程度の予算</p></div>
+<div class="card"><p class="lbl">注意</p><p class="txt">売上がレーキを上回るように</p><p class="note">神崎さん</p></div>
+</div>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+
+</section>
+</div><div class="frame"><section id="b-policy" data-transition="fade">
+<p class="eyebrow">リング施策</p>
+<h2>月20万円の施策枠はOK。中身は数字で決める</h2>
+<div class="flow">
+<p class="tag ok">決定：リング施策に月20万円までかけてよい</p>
+<p class="tag open">未決：やり方（バウンティか、別の方法か）</p>
+</div>
+<div class="cols">
+<div class="card"><p class="lbl">神崎さん</p><p class="txt">札幌は施策で「立たせる」のが難しい。<br>立ったら長く続く方に予算を振りたい</p><p class="note">案：リングバウンティに半月10万円（上限つき）</p></div>
+<div class="card"><p class="lbl">上村さん</p><p class="txt">バウンティはアクションが全体に遅くなる。<br>順位など別の方法がいい</p><p class="note">ただし月20万円をかけること自体はOK</p></div>
+</div>
+<p class="sub"><b>検証方針</b>　リングバウンティをやめた前後のレーキ時速を比べてから決める<br><b>ほかの案</b>　トナメからリングに移った人にだけボーナス</p>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+
+</section>
+</div><div class="frame"><section id="b-people" data-transition="fade">
+<p class="eyebrow">人で立てる</p>
+<h2>札幌の打ち手は、ボーナスより人で来る</h2>
+<div class="cols">
+<div class="card"><p class="lbl">かずき君（札幌の実感）</p><p class="txt">ボーナスはまず見ていない。<br>電話で誘われ、付き合いで来る</p><p class="note">ほかの場は毎日ではなく、週に数回だけ開いて連絡している</p></div>
+<div class="card"><p class="lbl">上村さん（大阪・東京の成功例）</p>
+<div class="kvs">
+<div class="kv"><p class="k">きっかけ</p><p class="v">早割・足代を出す</p></div>
+<div class="kv"><p class="k">呼ぶ人</p><p class="v">「一緒に打とう」と言える人<br>（渋谷のみずきさん）</p></div>
+<div class="kv"><p class="k">仕組み</p><p class="v">卓を立ててくれるスタッフに還元する</p></div>
+</div></div>
+</div>
+<p class="quote">「この人と打つなら行こう」と思わせられるか</p>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+</section>
+</div><div class="frame"><section id="b-other" data-transition="fade">
+<p class="eyebrow">そのほか</p>
+<h2>時給の伝え方・ディーラーの人数・周年</h2>
+<div class="cols3">
+<div class="card"><p class="lbl">時給案の伝え方</p><p class="txt">「生き残るため。<br>利益が出たら還元する」<br>と伝える</p><p class="note">神崎さんが全員を集めて一人ずつ。かずき君はまだ話していない</p></div>
+<div class="card"><p class="lbl">ディーラー</p><p class="txt">平日は3人で回す</p><p class="note">11月後半から、12月も継続。周年など忙しい日は4人。削った分の取りこぼしに注意</p></div>
+<div class="card"><p class="lbl">周年</p><p class="txt">「決定戦」などの名前で<br>保証を10万円上乗せ</p><p class="note">保証50〜60万円。ジールと同じやり方</p></div>
+</div>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+
+</section>
+</div><div class="frame"><section id="b-todo" data-transition="fade">
+<p class="eyebrow">ToDo</p>
+<h2>誰が、いつまでに</h2>
+<table>
+<tr class="hd"><th style="width:64%">やること</th><th style="width:22%">担当</th><th style="width:14%">期限</th></tr>
+<tr><td>札幌の現場全員に、時給の話を一人ずつ伝える</td><td>神崎</td><td class="today">すぐ</td></tr>
+<tr class="z"><td>札幌スタッフに時給案を話し始める</td><td>かずき君</td><td class="today">すぐ</td></tr>
+<tr><td>アミュリンの開始日・プライズを決める（未決01）</td><td>神崎・かずき君</td><td class="today">早く</td></tr>
+<tr class="z"><td>渋谷・上野のアミュリンをかずき君に共有</td><td>神崎</td><td class="later">未定</td></tr>
+<tr><td>リングバウンティをやめた日をメモで送る</td><td>神崎</td><td class="later">未定</td></tr>
+<tr class="z"><td>やめた前後のレーキ時速を出す（未決03）</td><td>神崎</td><td class="later">未定</td></tr>
+</table>
+<p class="tag open">期限が未定の3件は、次回までに期限を決める</p>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+
+</section>
+</div><div class="frame"><section id="b-mike" class="gold" data-transition="fade">
+<p class="eyebrow">まだ決まっていないこと</p>
+<h2>次までに決めること</h2>
+<div class="rows">
+<div class="row"><p class="no">01</p><div class="body"><p class="t">アミュリンの開始日とプライズの中身</p><p class="s">ToDo：神崎・かずき君。渋谷・上野の内容をもとに</p></div><p class="tag open">未決</p></div>
+<div class="row"><p class="no">02</p><div class="body"><p class="t">先着特典の新ルールとリングのオープン時間</p><p class="s">③の検証結果しだい</p></div><p class="tag open">未決</p></div>
+<div class="row"><p class="no">03</p><div class="body"><p class="t">リングバウンティか、別の方法か</p><p class="s">ToDo：神崎がレーキ時速の推移を出してから</p></div><p class="tag open">未決</p></div>
+<div class="row"><p class="no">04</p><div class="body"><p class="t">周年の中身と保証額</p><p class="s">ジールのやり方をもとに</p></div><p class="tag open">未決</p></div>
+</div>
+<p class="foot">11/19 札幌ミーティング</p>
+<p class="pg"></p>
+</section>
+</div></div>
+<div id="bar"></div>
+<div id="hud"><span id="no"></span><button id="bp" aria-label="前へ">←</button><button id="bn" aria-label="次へ">→</button><button id="bg">一覧</button><button id="bf">全画面</button></div>
+<script>
+const fr=[...document.querySelectorAll('.frame')];let i=0;
+try{const h=parseInt(location.hash.slice(1));if(h>0&&h<=fr.length)i=h-1;}catch(e){}
+function layout(){
+ const grid=document.body.classList.contains('grid');
+ fr.forEach(f=>{
+  if(grid){f.style.left=f.style.top=f.style.width=f.style.height='';const k=f.clientWidth/1920;f.firstElementChild.style.transform='scale('+k+')';return;}
+  const W=innerWidth,H=innerHeight,k=Math.min(W/1920,H/1080);
+  f.style.width=1920*k+'px';f.style.height=1080*k+'px';f.style.left=(W-1920*k)/2+'px';f.style.top=(H-1080*k)/2+'px';
+  f.firstElementChild.style.transform='scale('+k+')';});
+}
+function show(n){i=Math.max(0,Math.min(fr.length-1,n));fr.forEach((f,j)=>f.classList.toggle('on',j===i));
+ document.getElementById('no').textContent=(i+1)+' / '+fr.length;document.getElementById('bar').style.width=((i+1)/fr.length*100)+'%';
+ history.replaceState(null,'','#'+(i+1));}
+function grid(on){document.body.classList.toggle('grid',on);document.getElementById('bg').textContent=on?'発表':'一覧';layout();if(!on)show(i);}
+document.getElementById('bn').onclick=e=>{e.stopPropagation();show(i+1)};
+document.getElementById('bp').onclick=e=>{e.stopPropagation();show(i-1)};
+document.getElementById('bg').onclick=e=>{e.stopPropagation();grid(!document.body.classList.contains('grid'))};
+document.getElementById('bf').onclick=e=>{e.stopPropagation();document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();};
+fr.forEach((f,j)=>f.addEventListener('click',()=>{if(document.body.classList.contains('grid')){i=j;grid(false);}else show(i+1);}));
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(i+1)}
+ else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(i-1)}
+ else if(e.key==='Home')show(0);else if(e.key==='End')show(fr.length-1);
+ else if(e.key==='f'||e.key==='F')document.getElementById('bf').click();
+ else if(e.key==='g'||e.key==='G'||e.key==='Escape')grid(e.key==='Escape'?false:!document.body.classList.contains('grid'));});
+let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)show(i+(d<0?1:-1));tx=null;});
+addEventListener('resize',layout);layout();show(i);
+const hud=document.getElementById('hud');hud.classList.add('show');setTimeout(()=>hud.classList.remove('show'),2500);
+</script></body></html>
