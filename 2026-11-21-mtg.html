@@ -1,0 +1,162 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11/21 あめかわさん</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#0F1613;overflow:hidden;font-family:'Noto Sans JP','Hiragino Sans',sans-serif;}
+body{counter-reset:page;}
+p,h1,h2,h3{margin:0;} table{border-collapse:collapse;}
+x-shape{display:block;clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%);}
+x-icon{display:block;border-radius:50%;background:currentColor;}
+#deck{position:fixed;inset:0;}
+.frame{position:absolute;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .35s ease;}
+.frame.on{opacity:1;pointer-events:auto;}
+.frame section{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;}
+body.grid{overflow:auto;}
+body.grid #deck{position:static;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:16px;}
+body.grid .frame{position:relative;opacity:1;pointer-events:auto;aspect-ratio:16/9;border-radius:10px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+.on section .card,.on section .row,.on section .step,.on section .bar{animation:rise 450ms ease-out both;}
+#hud{position:fixed;right:16px;bottom:14px;display:flex;gap:8px;align-items:center;color:#A9B5AE;font-size:14px;opacity:.0;transition:opacity .3s;}
+body:hover #hud,#hud.show{opacity:1;}
+#hud button{background:#1F3329;color:#F3EEE2;border:0;border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer;}
+#bar{position:fixed;left:0;bottom:0;height:3px;background:#C8922E;transition:width .3s;}
+body.grid #bar{display:none;}
+section { counter-increment: page; box-sizing: border-box; padding: 128px 128px 160px; background: #F6F3EC; color: #1C2B27; font-family: 'Noto Sans JP', 'Hiragino Sans', Arial, sans-serif; display: flex; flex-direction: column; gap: 32px; }
+section.dark { background: #16261F; color: #F3EEE2; }
+section.gold { background: #E2B04A; color: #1C2B27; }
+section.center { justify-content: center; }
+
+.eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 3px; color: #8C5E12; }
+.dark .eyebrow { color: #E2B04A; }
+.gold .eyebrow { color: #4A3208; }
+h1 { font-size: 120px; font-weight: 900; line-height: 1.15; }
+h2 { font-size: 64px; font-weight: 900; line-height: 1.25; }
+h3 { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.lead { font-size: 44px; font-weight: 700; line-height: 1.4; }
+.dark .lead { color: #E2B04A; }
+.sub { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.dark .sub { color: #BFCBC4; }
+.sub b { color: #1C2B27; }
+
+.foot { position: absolute; left: 128px; top: 952px; width: 1300px; font-size: 24px; color: #5E6863; }
+.pg { position: absolute; left: 1592px; top: 952px; width: 200px; font-size: 24px; color: #5E6863; text-align: right; font-family: 'Space Grotesk', Arial, sans-serif; }
+.pg::before { content: counter(page); }
+.dark .foot { color: #A9B5AE; }
+.dark .pg { color: #A9B5AE; }
+.gold .foot { color: #4A3208; }
+.gold .pg { color: #4A3208; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.card { background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 36px 40px; display: flex; flex-direction: column; gap: 14px; }
+.card.hi { border: 4px solid #C8922E; }
+.card.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.card .lbl { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.card.dk .lbl { color: #E2B04A; }
+.card .txt { font-size: 32px; line-height: 1.5; }
+.card .note { font-size: 24px; line-height: 1.5; color: #5E6863; }
+.card.dk .note { color: #BFCBC4; }
+
+.numrow { display: flex; align-items: flex-end; gap: 12px; }
+.num { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; }
+.unit { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.mid { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 64px; font-weight: 700; line-height: 1.1; }
+.arr { width: 56px; height: 28px; background: #C8922E; flex: none; }
+.numrow .arr { margin-bottom: 24px; }
+
+.rows { display: flex; flex-direction: column; }
+.row { display: flex; gap: 36px; align-items: flex-start; padding: 22px 0; border-top: 2px solid #DDD4C2; }
+.row .no { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; color: #8C5E12; width: 80px; line-height: 1.3; }
+.row .body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.row .t { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.row .s { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.gold .row { border-top: 2px solid #B9862C; }
+.gold .row .no { color: #4A3208; }
+.gold .row .s { color: #3A2A0A; }
+
+.kvs { display: flex; flex-direction: column; gap: 10px; }
+.kv { display: flex; gap: 24px; align-items: flex-start; }
+.kv .k { width: 130px; flex: none; font-size: 24px; font-weight: 700; color: #8C5E12; line-height: 2; }
+.kv .v { flex: 1; font-size: 32px; line-height: 1.5; }
+
+.tag { align-self: flex-start; font-size: 24px; font-weight: 700; background: #F1DDB0; color: #5C3B06; padding: 6px 20px; border-radius: 40px; }
+.tag.warn { background: #F5D3C6; color: #7A2A10; }
+
+.flow { display: flex; align-items: center; gap: 20px; }
+.step { flex: 1; background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 32px 36px; display: flex; flex-direction: column; gap: 10px; }
+.step.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.step .lbl { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.step.dk .lbl { color: #E2B04A; }
+.step .txt { font-size: 32px; line-height: 1.5; font-weight: 700; }
+
+.quote { font-size: 44px; font-weight: 700; line-height: 1.45; border-left: 8px solid #C8922E; padding-left: 36px; }
+
+.bars { display: flex; flex-direction: column; gap: 24px; }
+.bar { display: flex; align-items: center; gap: 32px; }
+.bar .name { width: 280px; flex: none; font-size: 32px; font-weight: 700; }
+.bar .track { flex: 1; height: 64px; background: #E6DFD0; border-radius: 12px; overflow: hidden; display: flex; }
+.bar .fill { height: 64px; background: #16261F; }
+.bar .fill.g { background: #C8922E; }
+.bar .val { width: 220px; flex: none; font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 44px; font-weight: 700; text-align: right; }
+
+table { width: 100%; font-size: 32px; color: #1C2B27; }
+th { color: #F3EEE2; padding: 16px 24px; }
+td { padding: 16px 24px; }
+tr.hd { background: #16261F; }
+tr.z { background: #EFE8D9; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0px); } }
+.card { animation: rise 450ms ease-out both; }
+.row { animation: rise 450ms ease-out both; }
+.step { animation: rise 450ms ease-out both; }
+.bar { animation: rise 450ms ease-out both; }
+
+.tag.ok { background: #D7E9DC; color: #1F5A3A; }
+.tag.open { background: #F7E7C2; color: #5C3B06; }
+.gold .tag.open { background: #F6EBCF; color: #4A3208; }
+.row .tag { margin-top: 10px; flex: none; }
+.cols.top { align-items: start; }
+.alert { display: flex; align-items: center; gap: 24px; background: #F5D3C6; color: #7A2A10; border-radius: 20px; padding: 24px 32px; }
+.alert .ic { width: 40px; height: 40px; color: #7A2A10; flex: none; }
+.alert .at { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.today { color: #1F6B45; }
+.later { color: #9A5B00; }
+.card.mute { background: #EFEBE2; border: 2px solid #E3DBCA; }
+
+.fit{display:flex;flex-direction:column;gap:32px;transform-origin:0 0;flex:none;}
+section.center .fit{gap:28px;}
+</style></head><body>
+<div id="deck"><div class="frame"><section class="dark center"><div class="fit"><p class="eyebrow">2026.11.21</p><h1>あめかわさんmtg</h1><p class="lead">渋谷のライト層向け新規集客を始動</p><p class="sub">11/21 21:01〜21:27｜上村さん・神崎さん・あめかわさん</p></div></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">決まったこと</p><h2>今日決まった5つ</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">渋谷の対象はライト層</p><p class="s">熟練者ではなく、始めてみたい人・覚え始めた人</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">02</p><div class="body"><p class="t">公式LINEとLPの二本で進める</p><p class="s">動画は渋谷に今来ている人に向けて出す</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">03</p><div class="body"><p class="t">動画8本、12月撮影・年末投稿</p><p class="s">企画は12/1目安で共有し、確認後に撮影</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">04</p><div class="body"><p class="t">8本20万円・3ヶ月の運用契約</p><p class="s">税込220,000円。初月のみプランニング料50,000円</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">05</p><div class="body"><p class="t">投稿作業は現場が担当</p><p class="s">動画・文章・投稿スケジュールはあめかわさんが用意</p></div><p class="tag ok">決定</p></div></div></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">1｜目的</p><h2>ライト層を狙い、新規集客を最短で</h2><div class="flow"><div class="step"><p class="lbl">いま</p><p class="txt">ゲームの価格帯が高い。渋谷は単価が安い市場</p></div><x-shape class="arr"></x-shape><div class="step"><p class="lbl">施策</p><p class="txt">市場に合わせた施策と、それに絡めたマーケ</p></div><x-shape class="arr"></x-shape><div class="step dk"><p class="lbl">狙い</p><p class="txt">ライト層の新規集客を大きく狙う</p></div></div><p class="sub">開始時期がまとまったので今回のmtgを設定</p><p class="tag">要確認：価格帯が高いという課題／話者A（カズキさん）を上村さんと判断した点</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">2｜戦略</p><h2>公式LINEとLPの二本で新規を呼ぶ</h2><div class="cols3"><div class="card"><p class="lbl">新規用LINE</p><p class="txt">動画の告知や求人窓口に使う</p><p class="note">インスタのフォローより登録の方がつながりやすい</p></div><div class="card"><p class="lbl">LP</p><p class="txt">会社を調べた人が見たときの信頼性を上げる</p><p class="note">一枚ものなら可。今の形を基盤にするのが楽</p></div><div class="card"><p class="lbl">動画</p><p class="txt">渋谷に今来ている人に向けて出す</p></div></div><p class="sub">店舗専用の公式LINEを作ってよい（上村さん了承）</p><p class="tag">要確認：LPは作り直しか新規か／字幕「思考集客」</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">3｜公式LINE</p><h2>新規用LINEで何を流すかは未決</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">今のLINEは会員証用・全店共通</p><p class="s">店舗特典が難しく、情報はXで取られているため</p></div></div><div class="row"><p class="no">02</p><div class="body"><p class="t">上村さん：何を「教育」するのか</p><p class="s">ポーカーは興味を持てばすぐ来店する</p></div></div><div class="row"><p class="no">03</p><div class="body"><p class="t">新しい動画の告知を流せる</p><p class="s">フォローより登録の方がつながりやすい</p></div></div><div class="row"><p class="no">04</p><div class="body"><p class="t">求人の窓口にも使える</p><p class="s">DMは離脱が多い。LINEはやり取りを追いやすい</p></div></div></div><p class="sub">LINE・LPはもともと料金プラン外。作るかは任意</p><p class="tag">要確認：全店共通LINEで一斉配信できるか</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">4｜成果</p><h2>来店人数で費用対効果を見る</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">再生数を見る</p></div></div><div class="row"><p class="no">02</p><div class="body"><p class="t">初心者講習の予約フォームを置く</p><p class="s">プロフィール欄やコメント欄に</p></div></div><div class="row"><p class="no">03</p><div class="body"><p class="t">来店時の一言を数える</p><p class="s">「動画を見た」などを言ってもらう</p></div></div><div class="row"><p class="no">04</p><div class="body"><p class="t">月の来店人数で判断</p><p class="s">客単価は実施してみないと分からない</p></div></div></div><p class="sub">店舗での状況はあめかわさんが吸い上げる（神崎さん了承）</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">5｜初速</p><h2>既存客への告知で初速を担保</h2><div class="flow"><div class="step"><p class="lbl">告知</p><p class="txt">今の公式LINEでインスタ開始とキャンペーンを流す</p></div><x-shape class="arr"></x-shape><div class="step"><p class="lbl">初速</p><p class="txt">再生数を一定担保し、アルゴリズム上も伸びやすい</p></div><x-shape class="arr"></x-shape><div class="step dk"><p class="lbl">割引</p><p class="txt">初回・2回目向けの割引があるとよい</p></div></div><p class="sub">TikTok・インスタ視聴者への割引内容は今後グループで聞く</p><p class="tag">要確認：店名「カース渋谷」／全店共通LINEでの一斉配信の可否</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">6｜演者</p><h2>演者は水木さんが軸、神崎さんは出ない</h2><div class="cols3"><div class="card"><p class="lbl">水木さん</p><p class="txt">渋谷の店長。店に立つ人が出ると安心感がある</p><p class="note">神崎さんは必須と考える。出演可否は未決</p></div><div class="card"><p class="lbl">さくらちゃん</p><p class="txt">24歳。演者の候補</p></div><div class="card"><p class="lbl">神崎さん</p><p class="txt">メディアに出られない期間のため出演しない</p></div></div><p class="sub">全身が映らない前提で、男女でできる企画で進める</p><p class="tag">要確認：水木さんに出演を頼む担当者</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">7｜料金</p><h2>動画8本20万円、LINE・LPは込み</h2><table><tr class="hd"><th style="width:33%">項目</th><th style="width:33%">金額</th><th style="width:33%">備考</th></tr><tr><td>動画8本</td><td>20万円</td><td>税込220,000円</td></tr><tr class="z"><td>LINE・LP・フィード・ストーリーズ</td><td>込み</td><td>サービス扱い。要望増は工数的に厳しい</td></tr><tr><td>プランニング料</td><td>50,000円</td><td>初月のみ</td></tr><tr class="z"><td>契約期間</td><td>3ヶ月</td><td>運用契約（上村さん了承）</td></tr></table><p class="sub">個人受けのため会社を通さず請求書で対応</p><p class="tag">要確認：初月250,000円（字幕不明瞭）／請求書で差し引く割合</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">8｜進め方</p><h2>12月中に撮影、年末から投稿</h2><div class="flow"><div class="step"><p class="lbl">契約</p><p class="txt">明日契約書が届く。振込・署名後に開始</p></div><x-shape class="arr"></x-shape><div class="step"><p class="lbl">企画</p><p class="txt">8本の企画を12/1目安で共有し確認</p></div><x-shape class="arr"></x-shape><div class="step dk"><p class="lbl">撮影・投稿</p><p class="txt">12月上旬〜中旬に撮影、12月末頃から投稿</p></div></div><p class="sub">撮影の同行は可。あめかわさんはむしろ見に来てほしい</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">ToDo</p><h2>誰が、いつまでに</h2><table><tr class="hd"><th style="width:62%">やること</th><th style="width:22%">担当</th><th style="width:16%">期限</th></tr><tr><td>契約書を送る</td><td>あめかわさん</td><td class="today">11/22</td></tr><tr class="z"><td>振込と契約書の署名</td><td>渋谷側（担当未定）</td><td class="later">未定</td></tr><tr><td>動画企画8本をNotionかGoogleドキュメントで共有</td><td>あめかわさん</td><td class="today">12/1</td></tr><tr class="z"><td>演者を用意し、顔・年齢・名前を伝える</td><td>渋谷側（担当未定）</td><td class="later">未定</td></tr><tr><td>水木さんに出演を頼む</td><td>要確認</td><td class="later">未定</td></tr><tr class="z"><td>LPの内容を確認する</td><td>上村さん（要確認）</td><td class="later">未定</td></tr><tr><td>以前のLP・引き継ぎ用プロンプトを調べる</td><td>上村さん</td><td class="later">未定</td></tr></table><p class="tag open">期限が未定の5件は、次回までに期限を決める</p></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div><div class="frame"><section class="gold"><div class="fit"><p class="eyebrow">まだ決まっていないこと</p><h2>次までに決めること</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">新規用LINEの中身</p><p class="s">作るか・何を流すか、求人窓口を置くか</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">02</p><div class="body"><p class="t">視聴者向け割引の内容</p><p class="s">TikTok・インスタを見た人向け</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">03</p><div class="body"><p class="t">LPの作り直しの範囲</p><p class="s">今の形を基盤にするか、別デザインにするか</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">04</p><div class="body"><p class="t">水木さんの出演可否</p><p class="s">撮影の同行者を何人まで可とするかも未定</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">05</p><div class="body"><p class="t">上野の広告（別契約）</p><p class="s">本数・金額・時期。今年度末に箱が新しくなる</p></div><p class="tag open">未決</p></div></div></div><p class="foot">11/21 あめかわさん</p><p class="pg"></p></section></div></div>
+<div id="bar"></div>
+<div id="hud"><span id="no"></span><button id="bp" aria-label="前へ">←</button><button id="bn" aria-label="次へ">→</button><button id="bg">一覧</button><button id="bf">全画面</button></div>
+<script>
+const fr=[...document.querySelectorAll('.frame')];let i=0;
+try{const h=parseInt(location.hash.slice(1));if(h>0&&h<=fr.length)i=h-1;}catch(e){}
+function layout(){
+ const grid=document.body.classList.contains('grid');
+ fr.forEach(f=>{
+  if(grid){f.style.left=f.style.top=f.style.width=f.style.height='';const k=f.clientWidth/1920;f.firstElementChild.style.transform='scale('+k+')';return;}
+  const W=innerWidth,H=innerHeight,k=Math.min(W/1920,H/1080);
+  f.style.width=1920*k+'px';f.style.height=1080*k+'px';f.style.left=(W-1920*k)/2+'px';f.style.top=(H-1080*k)/2+'px';
+  f.firstElementChild.style.transform='scale('+k+')';});
+}
+function show(n){i=Math.max(0,Math.min(fr.length-1,n));fr.forEach((f,j)=>f.classList.toggle('on',j===i));
+ document.getElementById('no').textContent=(i+1)+' / '+fr.length;document.getElementById('bar').style.width=((i+1)/fr.length*100)+'%';
+ history.replaceState(null,'','#'+(i+1));}
+function grid(on){document.body.classList.toggle('grid',on);document.getElementById('bg').textContent=on?'発表':'一覧';layout();if(!on)show(i);}
+document.getElementById('bn').onclick=e=>{e.stopPropagation();show(i+1)};
+document.getElementById('bp').onclick=e=>{e.stopPropagation();show(i-1)};
+document.getElementById('bg').onclick=e=>{e.stopPropagation();grid(!document.body.classList.contains('grid'))};
+document.getElementById('bf').onclick=e=>{e.stopPropagation();document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();};
+fr.forEach((f,j)=>f.addEventListener('click',()=>{if(document.body.classList.contains('grid')){i=j;grid(false);}else show(i+1);}));
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(i+1)}
+ else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(i-1)}
+ else if(e.key==='Home')show(0);else if(e.key==='End')show(fr.length-1);
+ else if(e.key==='f'||e.key==='F')document.getElementById('bf').click();
+ else if(e.key==='g'||e.key==='G'||e.key==='Escape')grid(e.key==='Escape'?false:!document.body.classList.contains('grid'));});
+let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)show(i+(d<0?1:-1));tx=null;});
+addEventListener('resize',layout);layout();show(i);
+const hud=document.getElementById('hud');hud.classList.add('show');setTimeout(()=>hud.classList.remove('show'),2500);
+
+function fitAll(){document.querySelectorAll('.fit').forEach(el=>{el.style.transform='';el.style.width='';const max=el.parentElement.classList.contains('center')?824:792;const h=el.scrollHeight;if(h>max){const k=Math.max(.55,max/h);el.style.transform='scale('+k+')';el.style.width=(100/k)+'%';}});}
+fitAll();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);addEventListener('load',fitAll);
+</script></body></html>
