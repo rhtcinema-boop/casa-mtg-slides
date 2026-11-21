@@ -1,0 +1,162 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11/21 本部mtg</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#0F1613;overflow:hidden;font-family:'Noto Sans JP','Hiragino Sans',sans-serif;}
+body{counter-reset:page;}
+p,h1,h2,h3{margin:0;} table{border-collapse:collapse;}
+x-shape{display:block;clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%);}
+x-icon{display:block;border-radius:50%;background:currentColor;}
+#deck{position:fixed;inset:0;}
+.frame{position:absolute;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .35s ease;}
+.frame.on{opacity:1;pointer-events:auto;}
+.frame section{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;}
+body.grid{overflow:auto;}
+body.grid #deck{position:static;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:16px;}
+body.grid .frame{position:relative;opacity:1;pointer-events:auto;aspect-ratio:16/9;border-radius:10px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+.on section .card,.on section .row,.on section .step,.on section .bar{animation:rise 450ms ease-out both;}
+#hud{position:fixed;right:16px;bottom:14px;display:flex;gap:8px;align-items:center;color:#A9B5AE;font-size:14px;opacity:.0;transition:opacity .3s;}
+body:hover #hud,#hud.show{opacity:1;}
+#hud button{background:#1F3329;color:#F3EEE2;border:0;border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer;}
+#bar{position:fixed;left:0;bottom:0;height:3px;background:#C8922E;transition:width .3s;}
+body.grid #bar{display:none;}
+section { counter-increment: page; box-sizing: border-box; padding: 128px 128px 160px; background: #F6F3EC; color: #1C2B27; font-family: 'Noto Sans JP', 'Hiragino Sans', Arial, sans-serif; display: flex; flex-direction: column; gap: 32px; }
+section.dark { background: #16261F; color: #F3EEE2; }
+section.gold { background: #E2B04A; color: #1C2B27; }
+section.center { justify-content: center; }
+
+.eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 3px; color: #8C5E12; }
+.dark .eyebrow { color: #E2B04A; }
+.gold .eyebrow { color: #4A3208; }
+h1 { font-size: 120px; font-weight: 900; line-height: 1.15; }
+h2 { font-size: 64px; font-weight: 900; line-height: 1.25; }
+h3 { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.lead { font-size: 44px; font-weight: 700; line-height: 1.4; }
+.dark .lead { color: #E2B04A; }
+.sub { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.dark .sub { color: #BFCBC4; }
+.sub b { color: #1C2B27; }
+
+.foot { position: absolute; left: 128px; top: 952px; width: 1300px; font-size: 24px; color: #5E6863; }
+.pg { position: absolute; left: 1592px; top: 952px; width: 200px; font-size: 24px; color: #5E6863; text-align: right; font-family: 'Space Grotesk', Arial, sans-serif; }
+.pg::before { content: counter(page); }
+.dark .foot { color: #A9B5AE; }
+.dark .pg { color: #A9B5AE; }
+.gold .foot { color: #4A3208; }
+.gold .pg { color: #4A3208; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.card { background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 36px 40px; display: flex; flex-direction: column; gap: 14px; }
+.card.hi { border: 4px solid #C8922E; }
+.card.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.card .lbl { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.card.dk .lbl { color: #E2B04A; }
+.card .txt { font-size: 32px; line-height: 1.5; }
+.card .note { font-size: 24px; line-height: 1.5; color: #5E6863; }
+.card.dk .note { color: #BFCBC4; }
+
+.numrow { display: flex; align-items: flex-end; gap: 12px; }
+.num { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; }
+.unit { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.mid { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 64px; font-weight: 700; line-height: 1.1; }
+.arr { width: 56px; height: 28px; background: #C8922E; flex: none; }
+.numrow .arr { margin-bottom: 24px; }
+
+.rows { display: flex; flex-direction: column; }
+.row { display: flex; gap: 36px; align-items: flex-start; padding: 22px 0; border-top: 2px solid #DDD4C2; }
+.row .no { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; color: #8C5E12; width: 80px; line-height: 1.3; }
+.row .body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.row .t { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.row .s { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.gold .row { border-top: 2px solid #B9862C; }
+.gold .row .no { color: #4A3208; }
+.gold .row .s { color: #3A2A0A; }
+
+.kvs { display: flex; flex-direction: column; gap: 10px; }
+.kv { display: flex; gap: 24px; align-items: flex-start; }
+.kv .k { width: 130px; flex: none; font-size: 24px; font-weight: 700; color: #8C5E12; line-height: 2; }
+.kv .v { flex: 1; font-size: 32px; line-height: 1.5; }
+
+.tag { align-self: flex-start; font-size: 24px; font-weight: 700; background: #F1DDB0; color: #5C3B06; padding: 6px 20px; border-radius: 40px; }
+.tag.warn { background: #F5D3C6; color: #7A2A10; }
+
+.flow { display: flex; align-items: center; gap: 20px; }
+.step { flex: 1; background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 32px 36px; display: flex; flex-direction: column; gap: 10px; }
+.step.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.step .lbl { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.step.dk .lbl { color: #E2B04A; }
+.step .txt { font-size: 32px; line-height: 1.5; font-weight: 700; }
+
+.quote { font-size: 44px; font-weight: 700; line-height: 1.45; border-left: 8px solid #C8922E; padding-left: 36px; }
+
+.bars { display: flex; flex-direction: column; gap: 24px; }
+.bar { display: flex; align-items: center; gap: 32px; }
+.bar .name { width: 280px; flex: none; font-size: 32px; font-weight: 700; }
+.bar .track { flex: 1; height: 64px; background: #E6DFD0; border-radius: 12px; overflow: hidden; display: flex; }
+.bar .fill { height: 64px; background: #16261F; }
+.bar .fill.g { background: #C8922E; }
+.bar .val { width: 220px; flex: none; font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 44px; font-weight: 700; text-align: right; }
+
+table { width: 100%; font-size: 32px; color: #1C2B27; }
+th { color: #F3EEE2; padding: 16px 24px; }
+td { padding: 16px 24px; }
+tr.hd { background: #16261F; }
+tr.z { background: #EFE8D9; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0px); } }
+.card { animation: rise 450ms ease-out both; }
+.row { animation: rise 450ms ease-out both; }
+.step { animation: rise 450ms ease-out both; }
+.bar { animation: rise 450ms ease-out both; }
+
+.tag.ok { background: #D7E9DC; color: #1F5A3A; }
+.tag.open { background: #F7E7C2; color: #5C3B06; }
+.gold .tag.open { background: #F6EBCF; color: #4A3208; }
+.row .tag { margin-top: 10px; flex: none; }
+.cols.top { align-items: start; }
+.alert { display: flex; align-items: center; gap: 24px; background: #F5D3C6; color: #7A2A10; border-radius: 20px; padding: 24px 32px; }
+.alert .ic { width: 40px; height: 40px; color: #7A2A10; flex: none; }
+.alert .at { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.today { color: #1F6B45; }
+.later { color: #9A5B00; }
+.card.mute { background: #EFEBE2; border: 2px solid #E3DBCA; }
+
+.fit{display:flex;flex-direction:column;gap:32px;transform-origin:0 0;flex:none;}
+section.center .fit{gap:28px;}
+</style></head><body>
+<div id="deck"><div class="frame"><section class="dark center"><div class="fit"><p class="eyebrow">2026.11.21</p><h1>本部mtg</h1><p class="lead">着席ボーナス876案に決定、経費とカード整理</p><p class="sub">2026-11-21 14:13〜15:05／上村さん・神崎さん</p></div></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">決まったこと</p><h2>今日決まった4つ</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">飲食費は10万円だけ経費</p><p class="s">使った額は「20ぐらい」（要確認）。残りは上村さんの個人負担</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">02</p><div class="body"><p class="t">アスクルは末尾7581のカード</p><p class="s">要確認。登録は会議中に完了。末尾4532は使わない（要確認）</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">03</p><div class="body"><p class="t">着席ボーナスは「876案」</p><p class="s">1日合計5名。来た時間で8,000／7,000／6,000</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">04</p><div class="body"><p class="t">みずきさんの稼働時間は保留</p><p class="s">名前は要確認。不正かどうかは判断していない</p></div><p class="tag ok">決定</p></div></div></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">1｜渋谷の着席ボーナス</p><h2>着席ボーナスは「876案」に決定</h2><table><tr class="hd"><th style="width:33%">着席</th><th style="width:33%">人数</th><th style="width:33%">額</th></tr><tr><td>11時まで</td><td>5名</td><td>8,000</td></tr><tr class="z"><td>12時まで</td><td>5名</td><td>7,000</td></tr><tr><td>13時まで</td><td>5名</td><td>6,000</td></tr></table><p class="sub">対象は1日合計5名。来た時間で額が変わる</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">1｜渋谷の着席ボーナス</p><h2>データと他店比較から876案へ</h2><div class="cols3"><div class="card"><p class="lbl">データ</p><p class="txt">11時を過ぎると、卓が立つのは13時11分ごろの日が多い</p></div><div class="card"><p class="lbl">上村さん案</p><p class="txt">4時間プレイ必須。11時まで全員10,000、12時までは減額（4名8,000など）</p><p class="note">プレイ時間より額で差をつける方がよいという意見</p></div><div class="card"><p class="lbl">他店比較</p><p class="txt">渋デポ、クイーンズと比べ、13時の枠は5,000〜6,000の案</p></div></div><p class="tag">要確認：他店名「クイーンズ」</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">2｜着席ボーナスの保証</p><h2>卓が立たない時の保証は未決</h2><div class="cols"><div class="card"><p class="lbl">上村さん</p><p class="txt">卓が立たなくてももらえる「保証」を入れるか質問</p></div><div class="card"><p class="lbl">神崎さん</p><p class="txt">不要。今はどこもやっていないので優位性になりにくい</p><p class="note">「立たなかったらそれ入れる」案も出た（未決定）</p></div></div></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">3｜雨の日</p><h2>雨の日キャンペーンは案出しまで</h2><div class="flow"><div class="step"><p class="lbl">事実</p><p class="txt">卓が立たなかった日の約半分が雨の日</p></div><x-shape class="arr"></x-shape><div class="step"><p class="lbl">影響</p><p class="txt">雨の日は約6割で卓が2時間遅れる（神崎さん計算）</p></div><x-shape class="arr"></x-shape><div class="step dk"><p class="lbl">案</p><p class="txt">25時に+2,000円告知、千円上乗せ、タクシー代</p></div></div><p class="sub">上村さんは全店舗でよいのでは。神崎さんは上野で3,000点ぐらい出せるかも</p><p class="tag">要確認：−1,200点相当／1,200点まで雨の日ボーナスに使える考え</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">4｜札幌・渋谷</p><h2>札幌・渋谷のダビリティは今日作り明日テスト</h2><div class="flow"><div class="step"><p class="lbl">いま</p><p class="txt">札幌・渋谷でダビリティが使えない</p></div><x-shape class="arr"></x-shape><div class="step"><p class="lbl">今日</p><p class="txt">神崎さんが稼働中に作りきる</p></div><x-shape class="arr"></x-shape><div class="step dk"><p class="lbl">明日</p><p class="txt">神崎さんがテスト</p></div></div><p class="sub">上村さん：実施日（期限）を決めて現場にも伝えたい</p><p class="tag">要確認：「ダビリティ」「投資のやつ」の名称。使い始める日は未定</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">5｜札幌のリングゲーム</p><h2>札幌リングゲームは早急に修正</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">今はほぼゼロ</p><p class="s">上村さん：早く修正が必要</p></div></div><div class="row"><p class="no">02</p><div class="body"><p class="t">残りの作業は2つ</p><p class="s">リングボーナスを作って入れる、スタッフの時給をつける仕組み</p></div></div><div class="row"><p class="no">03</p><div class="body"><p class="t">リングバウンティーは未定</p><p class="s">別ルールも検討。予算は月10万円か、1か月20万円でもよいか</p></div></div><div class="row"><p class="no">04</p><div class="body"><p class="t">期間もはっきりせず</p><p class="s">「12月中旬から半月」か「月末まで」か</p></div></div></div></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">6｜売上管理と報酬</p><h2>りょうへい君と小田原の報酬は早めに伝える</h2><div class="cols"><div class="card"><p class="lbl">上村さん案</p><p class="txt">「440,220時間、プラス倍」。パーセントにするかは別に決める</p></div><div class="card"><p class="lbl">神崎さん案</p><p class="txt">「224、24で今のままでいきましょう」</p></div></div><p class="sub">売上管理は各店長がやってよい（上村さん）。いつまでに決めるかは未定</p><p class="tag">要確認：報酬案の数字はどちらも字幕の聞き取り</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">7｜9月の利益と大宮</p><h2>9月の利益計算を二人で確認する</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">大宮は10月分の経費も入れた</p><p class="s">9月で打ち切るとキャッシュフローがおかしくなるため</p></div></div><div class="row"><p class="no">02</p><div class="body"><p class="t">数字が合っているか確認</p><p class="s">上：税抜き、下：税込み。途中でいじって変な所があるかも</p></div></div><div class="row"><p class="no">03</p><div class="body"><p class="t">改造・追加部分の説明</p><p class="s">神崎さんから上村さんへの依頼</p></div></div></div><p class="tag">要確認：振り込み日払い550,000、家賃170,000、請求書440,000など</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">8｜コインの会計処理</p><h2>コインは使われた時に売上、消費税は未決</h2><div class="flow"><div class="step"><p class="lbl">買う</p><p class="txt">経費</p></div><x-shape class="arr"></x-shape><div class="step"><p class="lbl">付与する</p><p class="txt">何もなし（経費にならないことが大事）</p></div><x-shape class="arr"></x-shape><div class="step dk"><p class="lbl">店舗で使う</p><p class="txt">売上</p></div></div><p class="sub">神崎さん：付与した分は店が消費税を負担しているのでは、という疑問</p><p class="tag">要確認：10,000付与で売上9,000の例。説明の途中で記録終了</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">ToDo</p><h2>誰が、いつまでに</h2><table><tr class="hd"><th style="width:62%">やること</th><th style="width:22%">担当</th><th style="width:16%">期限</th></tr><tr><td>札幌・渋谷向け「投資のやつ」を作りきる</td><td>神崎さん</td><td class="today">今日</td></tr><tr class="z"><td>「投資のやつ」のテスト</td><td>神崎さん</td><td class="today">11/22</td></tr><tr><td>札幌リングゲーム：リングボーナスを入れる</td><td>神崎さん</td><td class="later">未定</td></tr><tr class="z"><td>札幌リングゲーム：スタッフ時給の仕組み</td><td>神崎さん</td><td class="later">未定</td></tr><tr><td>リングバウンティーの期間と予算を考える</td><td>神崎さん（要確認）</td><td class="later">未定</td></tr><tr class="z"><td>りょうへい君と小田原に報酬を伝える</td><td>未定</td><td class="today">すぐ</td></tr><tr><td>9月の利益計算の数字を確認する</td><td>神崎さん・上村さん</td><td class="later">未定</td></tr></table><p class="tag open">期限が未定の4件は、次回までに期限を決める</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class="gold"><div class="fit"><p class="eyebrow">まだ決まっていないこと</p><h2>次までに決めること</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">卓が立たない時の保証</p><p class="s">神崎さんは不要の意見。「立たなかったら入れる」案も</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">02</p><div class="body"><p class="t">雨の日キャンペーンの実施</p><p class="s">額・告知方法・全店舗か。雨の日母数の算出や札幌の解析も</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">03</p><div class="body"><p class="t">ダビリティを使い始める日</p><p class="s">名称は要確認。実施日を決めて現場に伝えたい</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">04</p><div class="body"><p class="t">報酬の形と決める期限</p><p class="s">時給かパーセントか。いつまでに決めるか</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">05</p><div class="body"><p class="t">コイン付与時の消費税負担</p><p class="s">説明の途中で記録が終了</p></div><p class="tag open">未決</p></div></div></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div></div>
+<div id="bar"></div>
+<div id="hud"><span id="no"></span><button id="bp" aria-label="前へ">←</button><button id="bn" aria-label="次へ">→</button><button id="bg">一覧</button><button id="bf">全画面</button></div>
+<script>
+const fr=[...document.querySelectorAll('.frame')];let i=0;
+try{const h=parseInt(location.hash.slice(1));if(h>0&&h<=fr.length)i=h-1;}catch(e){}
+function layout(){
+ const grid=document.body.classList.contains('grid');
+ fr.forEach(f=>{
+  if(grid){f.style.left=f.style.top=f.style.width=f.style.height='';const k=f.clientWidth/1920;f.firstElementChild.style.transform='scale('+k+')';return;}
+  const W=innerWidth,H=innerHeight,k=Math.min(W/1920,H/1080);
+  f.style.width=1920*k+'px';f.style.height=1080*k+'px';f.style.left=(W-1920*k)/2+'px';f.style.top=(H-1080*k)/2+'px';
+  f.firstElementChild.style.transform='scale('+k+')';});
+}
+function show(n){i=Math.max(0,Math.min(fr.length-1,n));fr.forEach((f,j)=>f.classList.toggle('on',j===i));
+ document.getElementById('no').textContent=(i+1)+' / '+fr.length;document.getElementById('bar').style.width=((i+1)/fr.length*100)+'%';
+ history.replaceState(null,'','#'+(i+1));}
+function grid(on){document.body.classList.toggle('grid',on);document.getElementById('bg').textContent=on?'発表':'一覧';layout();if(!on)show(i);}
+document.getElementById('bn').onclick=e=>{e.stopPropagation();show(i+1)};
+document.getElementById('bp').onclick=e=>{e.stopPropagation();show(i-1)};
+document.getElementById('bg').onclick=e=>{e.stopPropagation();grid(!document.body.classList.contains('grid'))};
+document.getElementById('bf').onclick=e=>{e.stopPropagation();document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();};
+fr.forEach((f,j)=>f.addEventListener('click',()=>{if(document.body.classList.contains('grid')){i=j;grid(false);}else show(i+1);}));
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(i+1)}
+ else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(i-1)}
+ else if(e.key==='Home')show(0);else if(e.key==='End')show(fr.length-1);
+ else if(e.key==='f'||e.key==='F')document.getElementById('bf').click();
+ else if(e.key==='g'||e.key==='G'||e.key==='Escape')grid(e.key==='Escape'?false:!document.body.classList.contains('grid'));});
+let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)show(i+(d<0?1:-1));tx=null;});
+addEventListener('resize',layout);layout();show(i);
+const hud=document.getElementById('hud');hud.classList.add('show');setTimeout(()=>hud.classList.remove('show'),2500);
+
+function fitAll(){document.querySelectorAll('.fit').forEach(el=>{el.style.transform='';el.style.width='';const max=el.parentElement.classList.contains('center')?824:792;const h=el.scrollHeight;if(h>max){const k=Math.max(.55,max/h);el.style.transform='scale('+k+')';el.style.width=(100/k)+'%';}});}
+fitAll();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);addEventListener('load',fitAll);
+</script></body></html>
