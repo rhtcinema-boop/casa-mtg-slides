@@ -1,0 +1,162 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11/21 本部mtg</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#0F1613;overflow:hidden;font-family:'Noto Sans JP','Hiragino Sans',sans-serif;}
+body{counter-reset:page;}
+p,h1,h2,h3{margin:0;} table{border-collapse:collapse;}
+x-shape{display:block;clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%);}
+x-icon{display:block;border-radius:50%;background:currentColor;}
+#deck{position:fixed;inset:0;}
+.frame{position:absolute;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .35s ease;}
+.frame.on{opacity:1;pointer-events:auto;}
+.frame section{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;}
+body.grid{overflow:auto;}
+body.grid #deck{position:static;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:16px;}
+body.grid .frame{position:relative;opacity:1;pointer-events:auto;aspect-ratio:16/9;border-radius:10px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+.on section .card,.on section .row,.on section .step,.on section .bar{animation:rise 450ms ease-out both;}
+#hud{position:fixed;right:16px;bottom:14px;display:flex;gap:8px;align-items:center;color:#A9B5AE;font-size:14px;opacity:.0;transition:opacity .3s;}
+body:hover #hud,#hud.show{opacity:1;}
+#hud button{background:#1F3329;color:#F3EEE2;border:0;border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer;}
+#bar{position:fixed;left:0;bottom:0;height:3px;background:#C8922E;transition:width .3s;}
+body.grid #bar{display:none;}
+section { counter-increment: page; box-sizing: border-box; padding: 128px 128px 160px; background: #F6F3EC; color: #1C2B27; font-family: 'Noto Sans JP', 'Hiragino Sans', Arial, sans-serif; display: flex; flex-direction: column; gap: 32px; }
+section.dark { background: #16261F; color: #F3EEE2; }
+section.gold { background: #E2B04A; color: #1C2B27; }
+section.center { justify-content: center; }
+
+.eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 3px; color: #8C5E12; }
+.dark .eyebrow { color: #E2B04A; }
+.gold .eyebrow { color: #4A3208; }
+h1 { font-size: 120px; font-weight: 900; line-height: 1.15; }
+h2 { font-size: 64px; font-weight: 900; line-height: 1.25; }
+h3 { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.lead { font-size: 44px; font-weight: 700; line-height: 1.4; }
+.dark .lead { color: #E2B04A; }
+.sub { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.dark .sub { color: #BFCBC4; }
+.sub b { color: #1C2B27; }
+
+.foot { position: absolute; left: 128px; top: 952px; width: 1300px; font-size: 24px; color: #5E6863; }
+.pg { position: absolute; left: 1592px; top: 952px; width: 200px; font-size: 24px; color: #5E6863; text-align: right; font-family: 'Space Grotesk', Arial, sans-serif; }
+.pg::before { content: counter(page); }
+.dark .foot { color: #A9B5AE; }
+.dark .pg { color: #A9B5AE; }
+.gold .foot { color: #4A3208; }
+.gold .pg { color: #4A3208; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.card { background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 36px 40px; display: flex; flex-direction: column; gap: 14px; }
+.card.hi { border: 4px solid #C8922E; }
+.card.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.card .lbl { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.card.dk .lbl { color: #E2B04A; }
+.card .txt { font-size: 32px; line-height: 1.5; }
+.card .note { font-size: 24px; line-height: 1.5; color: #5E6863; }
+.card.dk .note { color: #BFCBC4; }
+
+.numrow { display: flex; align-items: flex-end; gap: 12px; }
+.num { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; }
+.unit { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.mid { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 64px; font-weight: 700; line-height: 1.1; }
+.arr { width: 56px; height: 28px; background: #C8922E; flex: none; }
+.numrow .arr { margin-bottom: 24px; }
+
+.rows { display: flex; flex-direction: column; }
+.row { display: flex; gap: 36px; align-items: flex-start; padding: 22px 0; border-top: 2px solid #DDD4C2; }
+.row .no { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; color: #8C5E12; width: 80px; line-height: 1.3; }
+.row .body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.row .t { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.row .s { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.gold .row { border-top: 2px solid #B9862C; }
+.gold .row .no { color: #4A3208; }
+.gold .row .s { color: #3A2A0A; }
+
+.kvs { display: flex; flex-direction: column; gap: 10px; }
+.kv { display: flex; gap: 24px; align-items: flex-start; }
+.kv .k { width: 130px; flex: none; font-size: 24px; font-weight: 700; color: #8C5E12; line-height: 2; }
+.kv .v { flex: 1; font-size: 32px; line-height: 1.5; }
+
+.tag { align-self: flex-start; font-size: 24px; font-weight: 700; background: #F1DDB0; color: #5C3B06; padding: 6px 20px; border-radius: 40px; }
+.tag.warn { background: #F5D3C6; color: #7A2A10; }
+
+.flow { display: flex; align-items: center; gap: 20px; }
+.step { flex: 1; background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 32px 36px; display: flex; flex-direction: column; gap: 10px; }
+.step.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.step .lbl { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.step.dk .lbl { color: #E2B04A; }
+.step .txt { font-size: 32px; line-height: 1.5; font-weight: 700; }
+
+.quote { font-size: 44px; font-weight: 700; line-height: 1.45; border-left: 8px solid #C8922E; padding-left: 36px; }
+
+.bars { display: flex; flex-direction: column; gap: 24px; }
+.bar { display: flex; align-items: center; gap: 32px; }
+.bar .name { width: 280px; flex: none; font-size: 32px; font-weight: 700; }
+.bar .track { flex: 1; height: 64px; background: #E6DFD0; border-radius: 12px; overflow: hidden; display: flex; }
+.bar .fill { height: 64px; background: #16261F; }
+.bar .fill.g { background: #C8922E; }
+.bar .val { width: 220px; flex: none; font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 44px; font-weight: 700; text-align: right; }
+
+table { width: 100%; font-size: 32px; color: #1C2B27; }
+th { color: #F3EEE2; padding: 16px 24px; }
+td { padding: 16px 24px; }
+tr.hd { background: #16261F; }
+tr.z { background: #EFE8D9; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0px); } }
+.card { animation: rise 450ms ease-out both; }
+.row { animation: rise 450ms ease-out both; }
+.step { animation: rise 450ms ease-out both; }
+.bar { animation: rise 450ms ease-out both; }
+
+.tag.ok { background: #D7E9DC; color: #1F5A3A; }
+.tag.open { background: #F7E7C2; color: #5C3B06; }
+.gold .tag.open { background: #F6EBCF; color: #4A3208; }
+.row .tag { margin-top: 10px; flex: none; }
+.cols.top { align-items: start; }
+.alert { display: flex; align-items: center; gap: 24px; background: #F5D3C6; color: #7A2A10; border-radius: 20px; padding: 24px 32px; }
+.alert .ic { width: 40px; height: 40px; color: #7A2A10; flex: none; }
+.alert .at { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.today { color: #1F6B45; }
+.later { color: #9A5B00; }
+.card.mute { background: #EFEBE2; border: 2px solid #E3DBCA; }
+
+.fit{display:flex;flex-direction:column;gap:32px;transform-origin:0 0;flex:none;}
+section.center .fit{gap:28px;}
+</style></head><body>
+<div id="deck"><div class="frame"><section class="dark center"><div class="fit"><p class="eyebrow">2026.11.21</p><h1>本部mtg</h1><p class="lead">売上コイン購入の税務処理と数字の確認</p><p class="sub">2026-11-21 16:59〜17:32／上村さん・神崎さん</p></div></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">決まったこと</p><h2>今日決まった3つ</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">11/2の5万円は経費の消費税扱い</p><p class="s">日報11月2日の550,000円のうち50,000円が対象</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">02</p><div class="body"><p class="t">相殺のため領収書をもらう</p><p class="s">売上コイン分は領収書を全部出してもらう方向</p></div><p class="tag ok">決定</p></div><div class="row"><p class="no">03</p><div class="body"><p class="t">税務処理は上村さんが相手側に確認</p><p class="s">「じゃあ俺が聞くか」との発言。要確認</p></div><p class="tag ok">決定</p></div></div></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">1｜売上コインでのチケット購入</p><h2>請求書が出ず、税理士が処理を把握できない</h2><div class="flow"><div class="step"><p class="lbl">購入</p><p class="txt">売上コインでチケット購入。申請なし、相手側が処理</p></div><x-shape class="arr"></x-shape><div class="step"><p class="lbl">書類なし</p><p class="txt">請求書・領収書が出ず、ウォレットでも判別不可</p></div><x-shape class="arr"></x-shape><div class="step dk"><p class="lbl">未認識</p><p class="txt">税理士が処理を把握しているか不明。伝える必要あり</p></div></div><p class="sub">引く処理は小田さん担当。神崎さんはポーカーウェブとやり取りなし</p><p class="tag">要確認：チケット計算グループ・ポーカーウェブの名称</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">1｜売上コインでのチケット購入</p><h2>経費になるのは付与と使用、購入は資産</h2><div class="cols3"><div class="card"><p class="lbl">購入</p><p class="txt">ポイント購入は経費にならない。現金がポイント資産に変わるだけ</p></div><div class="card"><p class="lbl">付与・使用</p><p class="txt">経費に関係するのは付与と使用</p></div><div class="card"><p class="lbl">チケット</p><p class="txt">広告料を払った時に経費。チケットに変えた時も経費にする必要</p></div></div><p class="sub">ウォレットの入出金履歴をAIに読み込ませると決まったルールで処理（上村さん）</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">1｜売上コインでのチケット購入</p><h2>11/2の55万円、差額5万円が未処理</h2><div class="flow"><div class="step"><p class="lbl">付与</p><p class="txt">日報11月2日に550,000円。送金と同じ欄</p></div><x-shape class="arr"></x-shape><div class="step"><p class="lbl">引き出し</p><p class="txt">引き出し時は500,000円分しか入らない</p></div><x-shape class="arr"></x-shape><div class="step dk"><p class="lbl">差額</p><p class="txt">50,000円は経費の消費税として扱うと決定</p></div></div><p class="sub">神崎さん：10%取られる。今はできていない</p><p class="tag">要確認：550,000円はジーフリー。二重計上でないかも未確認</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">2｜利益計算と消費税</p><h2>利益計算は税抜き、消費税の認識で利益が変わる</h2><div class="cols"><div class="card"><p class="lbl">未認識</p><div class="numrow"><p class="mid">45,000</p><p class="unit">円</p></div><p class="txt">経費55,000円のまま計算すると利益は45,000円</p></div><div class="card"><p class="lbl">認識</p><div class="numrow"><p class="mid">50,000</p><p class="unit">円</p></div><p class="txt">経費の消費税を認識すると利益は50,000円</p></div></div><p class="sub">税抜き売上100,000円の例。相殺は納税額が決まるだけで利益計算には無関係</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">3｜月払い・報酬</p><h2>月払い・報酬の数字は一部要確認</h2><table><tr class="hd"><th style="width:25%">項目</th><th style="width:25%">金額</th><th style="width:25%">メモ</th><th style="width:25%">状態</th></tr><tr><td>合計</td><td>2,894,065円</td><td>月払いに入っていると思う</td><td>要確認</td></tr><tr class="z"><td>月払い合計</td><td>2,173,965円</td><td></td><td>要確認</td></tr><tr><td>小太郎</td><td>350,220（発言）</td><td>渋谷と上野で分割</td><td>要確認</td></tr><tr class="z"><td>リヒト</td><td>300,000円</td><td>上野に載せている</td><td></td></tr><tr><td>札幌</td><td>120,000円</td><td></td><td>確認済</td></tr></table><p class="sub">報酬にはりょうくんと小太郎の分が入っている</p><p class="tag">要確認：合計は14,894,465円、月払いは百十七万三千九百六十五円とも聞こえる</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">3｜月払い・報酬</p><h2>札幌は履歴読込で増、10月は上野でずれ</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">札幌からの歩合は札幌に載る</p><p class="s">神崎さんに歩合を出す場合。認識一致</p></div></div><div class="row"><p class="no">02</p><div class="body"><p class="t">札幌はウェブコイン履歴が未取得</p><p class="s">読み込めば数字が増える見込み</p></div></div><div class="row"><p class="no">03</p><div class="body"><p class="t">10月分は上野でずれていそう</p><p class="s">ポイントが新しくなってから供与が全部入っていない</p></div></div></div><p class="tag">要確認：上野のポイント名（「カーストポイント」と聞こえる）</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">4｜本部経費</p><h2>本部経費は75ぐらいの見込み、内訳は一覧で</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">以前は300,000円ぐらい計上</p><p class="s">駐車場などを解約して60ぐらいに減った</p></div></div><div class="row"><p class="no">02</p><div class="body"><p class="t">事務所家賃は9月も発生</p><p class="s">経費は70〜80、75ぐらいになりそう（上村さん）</p></div></div><div class="row"><p class="no">03</p><div class="body"><p class="t">内訳は一覧で出す</p><p class="s">部下に聞かれて答えられるレベルでよい（神崎さん）</p></div></div><div class="row"><p class="no">04</p><div class="body"><p class="t">扱いはもう少し検討</p><p class="s">上村さんは予定のため途中退出</p></div></div></div></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">ToDo</p><h2>誰が、いつまでに</h2><table><tr class="hd"><th style="width:62%">やること</th><th style="width:22%">担当</th><th style="width:16%">期限</th></tr><tr><td>売上コイン購入の税務処理・科目と消費税扱いを確認</td><td>上村さん（要確認）</td><td class="later">未定</td></tr><tr class="z"><td>10月のコイン残高・明細を全店舗で見られるか確認</td><td>未定</td><td class="later">未定</td></tr><tr><td>売上コイン分の領収書を全部出してもらう</td><td>未定</td><td class="later">未定</td></tr><tr class="z"><td>札幌のウェブコイン履歴を出して読み込む</td><td>神崎さん</td><td class="later">未定</td></tr><tr><td>残りの数字を確認し、問題の有無だけ報告</td><td>神崎さん</td><td class="later">未定</td></tr><tr class="z"><td>質問タグで10月分のずれ（上野の供与もれ）確認</td><td>神崎さん</td><td class="later">未定</td></tr><tr><td>本部経費の内訳一覧・事務所の初期費用等を渡す</td><td>上村さん</td><td class="later">未定</td></tr></table><p class="tag open">期限が未定の7件は、次回までに期限を決める</p></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div><div class="frame"><section class="gold"><div class="fit"><p class="eyebrow">まだ決まっていないこと</p><h2>次までに決めること</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">売上コイン分をチケット計算に載せるか</p><p class="s">全部か請求書払い分か。明細で代用可か。先月渋谷分も</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">02</p><div class="body"><p class="t">税理士・相手側が充当を把握しているか</p><p class="s">どの科目で処理されているかも不明</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">03</p><div class="body"><p class="t">11/2の55万円が二重になっていないか</p><p class="s">コイン付与と送金で二重の可能性</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">04</p><div class="body"><p class="t">現金化分は売上になるか</p><p class="s">売上の消費税は発生しないのか。聞き取りがあやしい</p></div><p class="tag open">未決</p></div><div class="row"><p class="no">05</p><div class="body"><p class="t">本部経費の扱い方</p><p class="s">金額は75ぐらいの見込み</p></div><p class="tag open">未決</p></div></div></div><p class="foot">11/21 本部mtg</p><p class="pg"></p></section></div></div>
+<div id="bar"></div>
+<div id="hud"><span id="no"></span><button id="bp" aria-label="前へ">←</button><button id="bn" aria-label="次へ">→</button><button id="bg">一覧</button><button id="bf">全画面</button></div>
+<script>
+const fr=[...document.querySelectorAll('.frame')];let i=0;
+try{const h=parseInt(location.hash.slice(1));if(h>0&&h<=fr.length)i=h-1;}catch(e){}
+function layout(){
+ const grid=document.body.classList.contains('grid');
+ fr.forEach(f=>{
+  if(grid){f.style.left=f.style.top=f.style.width=f.style.height='';const k=f.clientWidth/1920;f.firstElementChild.style.transform='scale('+k+')';return;}
+  const W=innerWidth,H=innerHeight,k=Math.min(W/1920,H/1080);
+  f.style.width=1920*k+'px';f.style.height=1080*k+'px';f.style.left=(W-1920*k)/2+'px';f.style.top=(H-1080*k)/2+'px';
+  f.firstElementChild.style.transform='scale('+k+')';});
+}
+function show(n){i=Math.max(0,Math.min(fr.length-1,n));fr.forEach((f,j)=>f.classList.toggle('on',j===i));
+ document.getElementById('no').textContent=(i+1)+' / '+fr.length;document.getElementById('bar').style.width=((i+1)/fr.length*100)+'%';
+ history.replaceState(null,'','#'+(i+1));}
+function grid(on){document.body.classList.toggle('grid',on);document.getElementById('bg').textContent=on?'発表':'一覧';layout();if(!on)show(i);}
+document.getElementById('bn').onclick=e=>{e.stopPropagation();show(i+1)};
+document.getElementById('bp').onclick=e=>{e.stopPropagation();show(i-1)};
+document.getElementById('bg').onclick=e=>{e.stopPropagation();grid(!document.body.classList.contains('grid'))};
+document.getElementById('bf').onclick=e=>{e.stopPropagation();document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();};
+fr.forEach((f,j)=>f.addEventListener('click',()=>{if(document.body.classList.contains('grid')){i=j;grid(false);}else show(i+1);}));
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(i+1)}
+ else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(i-1)}
+ else if(e.key==='Home')show(0);else if(e.key==='End')show(fr.length-1);
+ else if(e.key==='f'||e.key==='F')document.getElementById('bf').click();
+ else if(e.key==='g'||e.key==='G'||e.key==='Escape')grid(e.key==='Escape'?false:!document.body.classList.contains('grid'));});
+let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)show(i+(d<0?1:-1));tx=null;});
+addEventListener('resize',layout);layout();show(i);
+const hud=document.getElementById('hud');hud.classList.add('show');setTimeout(()=>hud.classList.remove('show'),2500);
+
+function fitAll(){document.querySelectorAll('.fit').forEach(el=>{el.style.transform='';el.style.width='';const max=el.parentElement.classList.contains('center')?824:792;const h=el.scrollHeight;if(h>max){const k=Math.max(.55,max/h);el.style.transform='scale('+k+')';el.style.width=(100/k)+'%';}});}
+fitAll();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);addEventListener('load',fitAll);
+</script></body></html>
