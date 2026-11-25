@@ -251,7 +251,7 @@ body.presenting #mini,body.presenting #zoombar,body.presenting #panel,body.prese
 const SRC = `
 リングを立てる :: id=root, ask=そのために何が必要か :: ゴールは「常に立卓している状態」。これが全部できて、やっとリングが立つ。各自が「自分は店全体のパーツ」と自覚して目標を持てるように、現場会議でこの図を見せて説明する。
   深夜営業の認知 :: id=shinya, ask=何が必要か :: 関西で深夜もやっていると思われていない。認知が足りない。オーシャンとジールは「一旦行こう」を取れている。深夜の告知はギリギリまで攻める。
-    24:00レイトトナメ作成 :: id=late, ask=どんなトナメか, 確 :: 会話では「25時レイトは全然あり」、資料には24時レイト。どちらにするかは要確認。
+    24:00レイトトナメ作成 :: id=late, ask=どんなトナメか, 決 :: 24時レイトで決定（会話では25時案も出たが、資料どおり24時に）。
       3,000出し 80K保証
   優秀なフロア :: id=floor, ask=どんな力が必要か :: 書いてみたら、ほとんどが優秀なフロアの話だった。その日のフロアでリングが立つかが決まる。
     属人力 :: id=zokujin, ask=属人力とは
@@ -447,7 +447,9 @@ function parse(src){
 
 /* 保存：この端末のブラウザに自動で */
 const LS='shikou-map:ring-v3';
-function load(){try{const s=localStorage.getItem(LS);if(s){const o=JSON.parse(s);if(o&&o.root)return o.root}}catch(e){}return parse(SRC)}
+function load(){try{const s=localStorage.getItem(LS);if(s){const o=JSON.parse(s);if(o&&o.root){fix24(o.root);return o.root}}}catch(e){}return parse(SRC)}
+/* 2026-11-26 深夜レイトは24時で決定。前に保存した端末の「要確認」も決定に直す */
+function fix24(r){(function w(n){if(n.id==='late'&&n.tags&&n.tags.check&&(n.note||'').includes('要確認')){delete n.tags.check;n.tags.done=true;n.note='24時レイトで決定（会話では25時案も出たが、資料どおり24時に）。'}(n.children||[]).forEach(w)})(r)}
 let ROOT=load();
 const savedEl=document.getElementById('saved');
 function persist(){if(PRESENT)return;try{localStorage.setItem(LS,JSON.stringify({v:3,root:ROOT,at:Date.now()}));savedEl.textContent='保存済み'}catch(e){savedEl.textContent='保存できません（書き出してください）'}}
