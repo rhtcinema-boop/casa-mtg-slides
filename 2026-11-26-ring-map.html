@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="リングを立てる">
+<meta name="theme-color" content="#eef1f6">
+<title>リングを立てる 思考マップ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ffd43b'/%3E%3Crect x='8' y='26' width='16' height='12' rx='3' fill='%23fff3a8' stroke='%23333' stroke-width='2'/%3E%3Crect x='40' y='12' width='16' height='12' rx='3' fill='%23c9ef9f' stroke='%23333' stroke-width='2'/%3E%3Crect x='40' y='40' width='16' height='12' rx='3' fill='%23bcd6ff' stroke='%23333' stroke-width='2'/%3E%3Cpath d='M24 32 H32 V18 H40 M32 32 V46 H40' stroke='%23333' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+<style>
+/* Miroの付箋の色（黄→薄黄→緑→青）を引き継いだ、左→右の木。道具はガラスの帯で上・右下・左下に浮かせる */
+:root{
+  --bg:#eef1f6; --dot:rgba(60,70,90,.16);
+  --glass:rgba(255,255,255,.62); --glass-strong:rgba(255,255,255,.88); --stroke:rgba(255,255,255,.9); --hair:rgba(20,30,50,.11); --hair2:rgba(20,30,50,.06);
+  --fg:#1d1d1f; --sub:#5f5f66; --card:#ffffff; --line:#4a4d55;
+  --s0:#ffd43b; --s1:#fff3a8; --s2:#c9ef9f; --s3:#d6e6ff; --sfg:#1d1d1f;
+  --blue:#0a84ff; --green:#30b158; --yellow:#e0a800; --red:#ff3b30;
+  --c-done:#1f8a43; --c-todo:#a85f00; --c-open:#8a3db5; --c-check:#7f5f00; --c-note:#0a62c4;
+  --shadow:0 6px 22px rgba(20,30,60,.10),0 1px 2px rgba(20,30,60,.08);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141518; --dot:rgba(255,255,255,.09);
+  --glass:rgba(40,42,48,.62); --glass-strong:rgba(44,46,52,.92); --stroke:rgba(255,255,255,.14); --hair:rgba(255,255,255,.13); --hair2:rgba(255,255,255,.06);
+  --fg:#f5f5f7; --sub:#b0b0b6; --card:#24262c; --line:#9da1aa;
+  --s0:#e8bd1c; --s1:#4a4426; --s2:#2f4a26; --s3:#243650; --sfg:#f5f5f7;
+  --shadow:0 6px 22px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.3);
+  --c-done:#5fd884; --c-todo:#ffb84d; --c-open:#d28cf5; --c-check:#f3c843; --c-note:#64b2ff; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141518; --dot:rgba(255,255,255,.09);
+  --glass:rgba(40,42,48,.62); --glass-strong:rgba(44,46,52,.92); --stroke:rgba(255,255,255,.14); --hair:rgba(255,255,255,.13); --hair2:rgba(255,255,255,.06);
+  --fg:#f5f5f7; --sub:#b0b0b6; --card:#24262c; --line:#9da1aa;
+  --s0:#e8bd1c; --s1:#4a4426; --s2:#2f4a26; --s3:#243650; --sfg:#f5f5f7;
+  --shadow:0 6px 22px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.3);
+  --c-done:#5fd884; --c-todo:#ffb84d; --c-open:#d28cf5; --c-check:#f3c843; --c-note:#64b2ff; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px;-webkit-font-smoothing:antialiased;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+#stage{position:fixed;inset:0;overflow:hidden;cursor:grab;background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:24px 24px}
+#stage.panning{cursor:grabbing}
+#world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+#edges{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.node{position:absolute;left:0;top:0;width:max-content;max-width:230px;min-width:56px;padding:10px 13px;border-radius:6px;background:var(--s3);color:var(--sfg);
+  box-shadow:var(--shadow);font-size:14px;line-height:1.45;cursor:pointer;transition:opacity .2s,box-shadow .15s;word-break:break-word;white-space:pre-wrap}
+.node .tx{outline:none;display:block;min-height:1.45em}
+.node .tx[contenteditable="true"]{cursor:text;user-select:text;-webkit-user-select:text;background:rgba(255,255,255,.55);border-radius:4px;margin:-2px -4px;padding:2px 4px}
+.node .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.node.l0{font-size:22px;font-weight:700;padding:18px 22px;background:var(--s0);max-width:260px}
+.node.l1{font-size:16px;font-weight:700;padding:14px 16px;background:var(--s1)}
+.node.l2{font-size:15px;font-weight:650;padding:12px 15px;background:var(--s2)}
+.node.sel{box-shadow:0 0 0 3px var(--blue),var(--shadow)}
+.node.hit{box-shadow:0 0 0 3px var(--yellow),var(--shadow)}
+.node.drop{box-shadow:0 0 0 3px var(--green),var(--shadow)}
+.node.focus{box-shadow:0 0 0 4px var(--blue),0 14px 40px rgba(10,132,255,.25)}
+.node.dim{opacity:.2}
+.node.dragging{cursor:grabbing;box-shadow:0 18px 40px rgba(20,30,60,.25);z-index:3}
+.ask{position:absolute;left:0;top:0;font-size:12px;font-weight:650;color:var(--sub);background:var(--bg);border:1px solid var(--hair);border-radius:999px;padding:3px 9px;white-space:nowrap;pointer-events:none;transition:opacity .2s}
+.ask.dim{opacity:.2}
+.tog{position:absolute;right:-16px;top:50%;transform:translateY(-50%);min-width:26px;height:26px;padding:0 6px;border-radius:13px;
+  background:var(--glass-strong);border:1px solid var(--hair);box-shadow:0 2px 6px rgba(0,0,0,.12);font-size:11px;font-weight:700;color:var(--sub);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.tog:hover{color:var(--blue)}
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:650;padding:2px 7px;border-radius:999px;line-height:1.5;white-space:nowrap}
+.t-done{background:rgba(48,177,88,.18);color:var(--c-done)}
+.t-todo{background:rgba(255,149,0,.2);color:var(--c-todo)}
+.t-open{background:rgba(175,82,222,.18);color:var(--c-open)}
+.t-check{background:rgba(224,168,0,.22);color:var(--c-check)}
+.t-note{background:rgba(10,132,255,.14);color:var(--c-note)}
+
+.glass{background:var(--glass);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--stroke);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.45)}
+.bar{position:fixed;display:flex;align-items:center;gap:6px;padding:6px;border-radius:999px;z-index:5}
+#top{top:calc(env(safe-area-inset-top,0px) + 12px);left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));border-radius:20px;flex-wrap:wrap;justify-content:space-between}
+.grp{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.title{font-weight:700;font-size:15px;padding:0 8px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+button{font:inherit;border:none;background:transparent;color:var(--fg);cursor:pointer}
+button:disabled{opacity:.35;cursor:default}
+.btn{height:34px;min-width:34px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap}
+.btn:hover:not(:disabled){background:var(--hair)}
+.btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.primary:hover:not(:disabled){background:#0a74e0}
+.btn:focus-visible,.tog:focus-visible,input:focus-visible,textarea:focus-visible,.node:focus-visible,.fchip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.seg{display:flex;background:var(--hair);border-radius:999px;padding:2px}
+.seg .btn{height:30px;padding:0 10px}
+.fchip{height:32px;padding:0 11px;border-radius:999px;font-size:12px;font-weight:650;display:inline-flex;align-items:center;gap:5px}
+.fchip .n{font-variant-numeric:tabular-nums;opacity:.8}
+.fchip.on{box-shadow:inset 0 0 0 2px currentColor}
+#q{height:34px;width:140px;border-radius:999px;border:1px solid var(--hair);background:var(--glass-strong);color:var(--fg);padding:0 12px;font:inherit;font-size:13px}
+#saved{font-size:11px;color:var(--sub);padding:0 6px;white-space:nowrap}
+#zoombar{bottom:calc(env(safe-area-inset-bottom,0px) + 14px);right:max(14px,env(safe-area-inset-right,0px))}
+#zv{font-size:12px;font-weight:650;min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
+#mini{position:fixed;left:max(14px,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 14px);width:190px;height:120px;border-radius:16px;z-index:5;cursor:pointer;overflow:hidden}
+#mini canvas{width:100%;height:100%;display:block}
+#ctx{position:fixed;z-index:7;display:flex;gap:2px;padding:4px;border-radius:14px;transform:translate(-50%,-100%)}
+#ctx .btn{height:32px;padding:0 10px;font-size:12px}
+#ctx .btn.danger{color:var(--red)}
+#ctx .sep{width:1px;background:var(--hair);margin:4px 4px}
+.seg .btn.on{background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.14);color:var(--blue)}
+.tog::after{content:"";position:absolute;inset:-7px}
+#talk .dot{position:relative}#talk .dot::after{content:"";position:absolute;inset:-8px -2px}
+.node.far{opacity:.38}
+#panel.more-below{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 44px),transparent)}
+#panel{scrollbar-width:thin}
+#topHint{display:none}
+.seglbl{font-size:11px;color:var(--sub);font-weight:650;padding:0 2px 0 6px;white-space:nowrap}
+#panel{position:fixed;right:max(14px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 78px);width:310px;max-height:calc(100% - 176px);overflow:auto;border-radius:20px;padding:16px;z-index:6;
+  user-select:text;-webkit-user-select:text;touch-action:pan-y}
+#panel h2{margin:0 0 8px;font-size:17px;line-height:1.35;text-wrap:balance;padding-right:28px}
+.crumb{font-size:11px;color:var(--sub);margin-bottom:6px;line-height:1.5;padding-right:28px}
+.lbl{display:block;font-size:11px;color:var(--sub);font-weight:650;margin:12px 0 5px}
+.tagrow{display:flex;gap:6px;flex-wrap:wrap}
+.tagbtn{height:30px;padding:0 11px;border-radius:999px;font-size:12px;font-weight:650;border:1px solid var(--hair)}
+.tagbtn.on{border-color:currentColor}
+.tagbtn:not(.on){background:var(--card)!important;color:var(--sub)!important}
+textarea,.inp{width:100%;font:inherit;font-size:13px;line-height:1.6;color:var(--fg);background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:9px 11px;resize:vertical}
+textarea{min-height:84px}
+.inp{height:34px;padding:0 11px}
+.list{display:flex;flex-direction:column;gap:6px}
+.li{display:block;text-align:left;width:100%;padding:8px 10px;border-radius:12px;background:var(--glass-strong);border:1px solid var(--hair);font-size:13px;line-height:1.45}
+.li:hover{border-color:var(--blue)}
+.li small{display:block;color:var(--sub);font-size:11px;margin-top:2px}
+.x{position:absolute;right:10px;top:10px;width:32px;height:32px;border-radius:16px;font-size:17px;color:var(--sub)}
+.x:hover{background:var(--hair)}
+.dlg{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(390px,calc(100% - 32px));max-height:calc(100% - 40px);overflow:auto;border-radius:22px;padding:20px;z-index:9;font-size:14px;line-height:1.7}
+.dlg h3{margin:0 0 8px;font-size:16px}
+.dlg kbd{font-family:inherit;font-size:12px;padding:1px 6px;border-radius:6px;background:var(--hair)}
+.dlg .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.dlg .btn{background:var(--hair)}
+.dlg .btn.danger{background:var(--red);color:#fff}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 80px);transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 16px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+#toast .btn{height:30px;background:var(--blue);color:#fff}
+#more{position:fixed;z-index:8;top:calc(env(safe-area-inset-top,0px) + 66px);right:max(12px,env(safe-area-inset-right,0px));border-radius:16px;padding:6px;display:flex;flex-direction:column;min-width:210px}
+#more .btn{justify-content:flex-start;border-radius:10px;height:38px}
+#more hr{border:none;border-top:1px solid var(--hair);margin:4px 6px}
+/* 順に話す */
+#talk{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:min(680px,calc(100% - 24px));border-radius:22px;padding:14px 16px 12px;z-index:8}
+#talk .say{font-size:17px;line-height:1.6;font-weight:600;text-wrap:pretty;min-height:3.2em}
+#talk .say small{display:block;font-size:12px;color:var(--sub);font-weight:500;margin-top:4px}
+#talk .row{display:flex;align-items:center;gap:8px;margin-top:10px}
+#talk .dots{flex:1;display:flex;gap:4px;flex-wrap:wrap}
+#talk .dot{width:8px;height:8px;border-radius:4px;background:var(--hair);padding:0}
+#talk .dot.on{background:var(--blue);width:20px}
+#talk .cnt{font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums;min-width:40px;text-align:right}
+body.presenting #mini,body.presenting #zoombar,body.presenting #panel,body.presenting #ctx{display:none!important}
+@media (max-width:720px){
+  #q{width:96px}.title{display:none}#saved{display:none}
+  #top{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;border-radius:999px;scrollbar-width:none;touch-action:pan-x}
+  #top::-webkit-scrollbar{display:none}
+  #top .grp{flex-wrap:nowrap;flex:none}
+  #panel{left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px));top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 66px);width:auto;max-height:48%}
+  #mini{display:none}
+  #more{top:calc(env(safe-area-inset-top,0px) + 62px)}
+  #talk .say{font-size:15px}
+  #talk .dots{visibility:hidden}
+  .btn{height:40px;min-width:40px}.seg .btn{height:36px}.tog{min-width:32px;height:32px;border-radius:16px;right:-18px}
+  #top{-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent);padding-right:40px}
+  .seglbl{display:inline;font-size:10px;padding-left:2px}
+  #topHint{display:flex;position:fixed;z-index:6;top:calc(env(safe-area-inset-top,0px) + 12px);right:max(12px,env(safe-area-inset-right,0px));height:52px;width:30px;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--sub);pointer-events:none}
+  body.top-end #topHint{display:none}
+  body.top-end #top{-webkit-mask-image:none;mask-image:none}
+  #ctx .btn{height:38px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-transparency:reduce){.glass{background:var(--glass-strong);backdrop-filter:none;-webkit-backdrop-filter:none}}
+</style>
+</head>
+<body>
+<div id="stage"><div id="world"><svg id="edges" width="1" height="1"></svg></div></div>
+
+<div id="top" class="bar glass">
+  <div class="grp">
+    <span class="title" id="title">リングを立てる</span>
+    <button class="btn primary" id="talkBtn" title="現場会議で、話す順に1つずつ見せる">▶ 順に説明</button>
+    <button class="btn" id="undo" aria-label="元に戻す" title="元に戻す (⌘Z)"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button>
+    <button class="btn" id="redo" aria-label="やり直す" title="やり直す (⇧⌘Z)"><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/></svg></button>
+    <span class="seglbl">表示する段</span><div class="seg" role="group" aria-label="表示する段">
+      <button class="btn" data-depth="2">2</button><button class="btn" data-depth="3">3</button><button class="btn" data-depth="4">4</button><button class="btn" data-depth="99">全部</button>
+    </div>
+  </div>
+  <div class="grp" id="filters"></div>
+  <div class="grp">
+    <span id="saved">保存済み</span>
+    <input id="q" type="search" placeholder="さがす" aria-label="カードをさがす" autocomplete="off">
+    <button class="btn" id="moreBtn" aria-label="そのほか" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg></button>
+    <button class="btn" id="helpBtn" aria-label="使い方">?</button>
+  </div>
+</div>
+<div id="topHint" aria-hidden="true">›</div>
+<div id="more" class="glass" hidden>
+  <button class="btn" id="mReset">配置を自動に戻す</button>
+  <button class="btn" id="mExport">書き出す（ファイル）</button>
+  <button class="btn" id="mImport">読み込む（ファイル）</button>
+  <hr>
+  <button class="btn" id="mOrig" style="color:var(--red)">最初の内容に戻す…</button>
+</div>
+<input type="file" id="file" accept="application/json,.json" hidden>
+
+<div id="zoombar" class="bar glass">
+  <button class="btn" id="zo" aria-label="縮小">−</button><span id="zv">100%</span><button class="btn" id="zi" aria-label="拡大">＋</button>
+  <button class="btn" id="fit" title="全体を表示 (F)">全体</button>
+</div>
+<div id="mini" class="glass" aria-label="全体図"><canvas id="mc"></canvas></div>
+<div id="ctx" class="glass" hidden>
+  <button class="btn" data-a="child" title="1つ下の段に追加 (Tab)">＋下の段に追加</button>
+  <button class="btn" data-a="sib" title="同じ段に追加 (Enter)">＋同じ段に追加</button>
+  <button class="btn" data-a="edit" title="文字を編集 (ダブルクリック)">編集</button>
+  <span class="sep"></span><button class="btn danger" data-a="del" title="削除 (Delete)">削除</button>
+</div>
+<aside id="panel" class="glass" hidden></aside>
+<div id="talk" class="glass" hidden>
+  <div class="say" id="say"></div>
+  <div class="row">
+    <button class="btn" id="tPrev" aria-label="前へ">‹ 前</button>
+    <div class="dots" id="dots"></div>
+    <span class="cnt" id="tCnt" aria-live="polite"></span>
+    <button class="btn primary" id="tNext">次へ ›</button>
+    <button class="btn" id="tEnd">説明を終える</button>
+  </div>
+</div>
+<div id="toast" class="glass" hidden><span id="toastMsg"></span><button class="btn" id="toastBtn">元に戻す</button></div>
+
+<div id="help" class="dlg glass" hidden>
+  <button class="x" id="helpX" aria-label="閉じる">×</button>
+  <h3>使い方</h3>
+  <b>見る</b><br>
+  背景をドラッグで移動、ピンチ／<kbd>⌘</kbd>＋スクロールで拡大<br>
+  灰色の札は矢印の名前。そこから右に出ている矢印は全部その答え<br>
+  点線は「ここともつながる」印<br>
+  <b>説明する</b><br>
+  「▶ 順に説明」で、会議で話す順に1つずつ開く（<kbd>→</kbd>次 <kbd>←</kbd>前 <kbd>Esc</kbd>終える）<br>
+  <b>書く</b><br>
+  ダブルクリックで文字を直す（<kbd>Enter</kbd>決定 <kbd>Esc</kbd>やめる）<br>
+  選んで <kbd>Tab</kbd> 下の段に追加 <kbd>Enter</kbd> 同じ段に追加 <kbd>Delete</kbd> 削除 <kbd>⌘Z</kbd> 元に戻す<br>
+  カードをドラッグで配置替え。別のカードに重ねて離すと、その下へ移る<br>
+  <span style="color:var(--sub);font-size:12px">書いた内容はこの端末のブラウザに自動で保存。別の端末へは「…」→ 書き出す／読み込む。<br>元：Miro「初めてのボード」と 11/26 本部mtg の 02:59〜04:26 の会話</span>
+</div>
+<div id="confirm" class="dlg glass" hidden>
+  <h3 id="cfT"></h3><div id="cfB" style="color:var(--sub);font-size:13px"></div>
+  <div class="row"><button class="btn danger" id="cfOk"></button><button class="btn" id="cfNo">やめる</button></div>
+</div>
+
+<script>
+/* 最初の中身（Miroのボードそのままの形）。
+   書き方：2スペースで字下げ。「本文 :: 札 :: 会話のメモ」
+   札：id=名前／ask=右に出る矢印の名前（同じ高さの矢印は全部この意味）／決・未・確／todo=担当
+   「→ 名前」の行：そのカードとも点線でつながる */
+const SRC = `
+リングを立てる :: id=root, ask=そのために何が必要か :: ゴールは「常に立卓している状態」。これが全部できて、やっとリングが立つ。各自が「自分は店全体のパーツ」と自覚して目標を持てるように、現場会議でこの図を見せて説明する。
+  深夜営業の認知 :: id=shinya, ask=何が必要か :: 関西で深夜もやっていると思われていない。認知が足りない。オーシャンとジールは「一旦行こう」を取れている。深夜の告知はギリギリまで攻める。
+    24:00レイトトナメ作成 :: id=late, ask=どんなトナメか, 確 :: 会話では「25時レイトは全然あり」、資料には24時レイト。どちらにするかは要確認。
+      3,000出し 80K保証
+  優秀なフロア :: id=floor, ask=どんな力が必要か :: 書いてみたら、ほとんどが優秀なフロアの話だった。その日のフロアでリングが立つかが決まる。
+    属人力 :: id=zokujin, ask=属人力とは
+      来店理由になっているか :: id=raiten, ask=来店理由になる要素 :: 「その人がいるから行く」と思われているか。
+        ポーカーできるか :: ask=どういうことか
+          上手い
+          いっぱいチップくれる（美味しい）
+        トーク力 :: id=talkp, ask=どんな力が必要か :: 「テーブル全員が参加できる内容しか喋らない」と「お客さん同士が喋れる話題を出す」は、結局同じところにつながる。
+          相手の話題に合わせる
+            知らない話題でも会話を広げられる
+          ボケ・ツッコミ
+            いじり・いじられ、IQ下げた発言
+          話題展開 :: :: 例：海外の話 → タイはご飯が美味しい → 結局日本だよね → 日本で何が好き？
+            一つの話題がマジカルバナナのように広がる
+          全員を巻き込んだ会話
+            お客さんと一対一で話さない
+              会話に入れていない人を作らない
+                テーブル全員が参加できる内容しか喋らない :: id=allin
+          お客さん同士を仲良くさせる
+            自分が喋りすぎない
+              お客さん同士が喋れる話題を出す
+                → allin
+          見た目の変化に気づいて会話に持っていく
+            身につけているものに気づく
+              アクセサリー
+              髪型
+              服装
+        見た目 :: id=mitame, ask=何に気をつけるか :: 厳しい話ではない。「パジャマで来ない」くらいの次元。大枠はこういう所を見るんだよ、と伝える。
+          髪セット
+            さっぱりした髪の長さ
+            ワックスをつける
+            アイロンする
+          メイク
+            ノーメイクで来ない
+            マスクをつけない
+            髭を剃る
+          服装
+            だる着で来ない
+              サンダル
+              スウェット
+    営業力 :: id=eigyo, ask=営業力が試される場面 :: 「全部ちゃんとわかっている」という次元の話ではない。
+      レジ前 :: id=regi, ask=何が必要か
+        相手のネガティブを見つける力 :: ask=ネガティブを見つけるとは :: 困っている所を拾い上げる。価値営業の当たり前。
+          困りごとを会話で引き出す
+          見つけた上で解決案を出せるか :: id=kaiketsu
+        今の施策を全部わかっているか
+          → kaiketsu
+        レジ前営業の経験 :: ask=経験とは
+          回数をこなす :: ask=なぜか :: 一発では覚えられない。
+            自分のキャラに合った営業方法がある
+            テンプレは覚えにくい
+      LINE :: id=line, ask=何が必要か
+        お客さんの連絡先を聞く :: ask=どうやって聞くか
+          質問されたら「今後も何かあったらLINEで聞いてください」 :: id=lineask
+        来店中に「何かあったら自分にLINEして」と言う
+          → lineask
+        即レス :: ask=なんで必要か
+          信頼を得るため :: id=shinrai
+        トラブル時の丁寧な報告
+          → shinrai
+    雰囲気作り :: id=fun, ask=必要なこと :: 必要なことは全部。どれか1つでも崩れるとだめ。
+      内装 :: ask=要素
+        店内動線
+          狭い所・通りづらい所はないか
+        POP貼り
+          最新のものを貼れているか
+          一番訴求したい順に配置できているか
+      掃除 :: ask=要素 :: 人によって認識がずれている所だけ、そろえればいい。
+        床
+        卓上
+          使っていない卓には何も置かない
+        トイレ
+        入口
+          キャッシャーまでの導線に何も置かない
+        レジ周り
+        ゴミ箱
+        管理する仕組み
+          掃除担当を決めて報連相させる
+      音楽 :: ask=要素
+        ジャンル統一
+          決まったプレイリストを流す
+            Claudeでプレイリスト自動更新の仕組みを作成済み
+        高いBPMの曲
+          心拍数を上げる
+            射幸心をあおってドーパミンを出させる
+      客数 :: ask=なんで必要か
+        盛り上がっている感
+          人が少ないと孤立感がある
+      アロマ :: ask=なんで必要か
+        店の印象づくり
+          香りは記憶に残りやすい
+            長くいると服に着く
+              店の外でも自然に思い出す
+      スタッフの雰囲気 :: ask=要素 :: プラスのイメージを作る方の話。
+        イベントを盛り上げる
+          合いの手
+      常連の雰囲気 :: ask=要素
+        身内ノリすぎない :: :: 会話の話ともつながる。
+          マナーが悪ければ誰でも注意する
+          → allin
+    初心者講習 :: id=koushu, ask=要素
+      ポーカーへの理解
+      初心者講習の講習を受ける
+    キャラ設定 :: id=chara, ask=要素
+      自分を知る :: ask=どっちなのか
+        真面目キャラ :: ask=真面目キャラとは
+          接客が丁寧でかしこまっている
+            口調が丁寧（敬語が使える）
+            感情が出ていない
+        ふざけキャラ
+          メリハリがある
+            真面目もできる
+            ふざけている時もある
+              感情が出る
+    シフト配置 :: id=shift, ask=要素
+      各スタッフのキャラの理解
+      スタッフの雰囲気がいい状態
+      担当のお客さんが来る時間の把握
+    勤怠 :: id=kintai, ask=要素
+      遅刻しない
+      感情が出ない
+  新たな常連の獲得 :: id=joren, ask=要素
+    リピート施策
+      新規割 :: id=shinkiwari
+      紹介割
+      割引チケット
+    スタッフ属人
+    お客さん属人
+  新規客 :: id=shinki, ask=要素 :: SNSは全部につながる。
+    → shinkiwari
+    SNS発信 :: id=sns, ask=どんなことをするか
+      新施策
+        高分岐トナメ
+          フリロ
+          ハイプライズマッチ
+        インリツキャンペーン
+      クリエイティブ
+        POP作成
+          AIっぽくない
+            既存のデザインに似ていて馴染み深い
+          目につく
+        プロフィール
+          わかりやすさ
+          MEO
+  常に立卓していること :: id=ritaku, ask=要素 :: まばらに来る人が多いので、立卓していることが大切すぎる。SNSに出すのも「全員立卓しているイメージ」。
+    → sns
+    がじり勢が来る
+      高い先着ボーナス :: id=bonus
+  先着ボーナス :: id=senchaku, ask=要素
+    → bonus
+`;
+
+/* 現場会議で話す順（会話の流れどおり）。open=開くカード、focus=寄せる所 */
+const STEPS=[
+  {focus:'root',open:[],say:'ゴールは「リングを立てる」。いつ来ても、常に卓が立っている状態のこと。',sub:'今日はこの図を1枚だけ覚えて帰ってください。'},
+  {focus:'root',open:['root'],say:'そのために必要なのは、この6つ。',sub:'深夜営業の認知／優秀なフロア／新たな常連の獲得／新規客／常に立卓していること／先着ボーナス'},
+  {focus:'shinya',open:['shinya','late'],say:'関西で「深夜もやっている」と思われていない。だから深夜のレイトトナメを作って、認知を取りにいく。',sub:'例：3,000出し 80K保証。告知はギリギリまで攻める。'},
+  {focus:'floor',open:['floor'],say:'ここからが本題。優秀なフロアに必要な力は、この7つ。',sub:'属人力／営業力／雰囲気作り／初心者講習／キャラ設定／シフト配置／勤怠'},
+  {focus:'zokujin',open:['zokujin','raiten'],say:'属人力は「その人が来店理由になっているか」。ポーカー・トーク力・見た目の3つ。'},
+  {focus:'talkp',open:['talkp','talkp/*'],say:'トーク力でいちばん大事なのは、テーブル全員が参加できる話しかしないこと。',sub:'お客さん同士が喋れる話題を出すのも、身内ノリしすぎないのも、全部ここにつながる。'},
+  {focus:'mitame',open:['mitame','mitame/*'],say:'見た目は特別なことじゃない。髪・メイク・服装、「パジャマで来ない」くらいの話。'},
+  {focus:'regi',open:['eigyo','regi','regi/*'],say:'営業力が試されるのはレジ前とLINE。レジ前は、困りごとを会話で引き出して、今の施策から解決案を出す。',sub:'これは回数をこなすしかない。自分のキャラに合ったやり方がある。'},
+  {focus:'line',open:['line','line/*'],say:'LINEは連絡先を聞くところから。質問されたら「今後も何かあったらLINEで聞いてください」。',sub:'即レスと、トラブル時の丁寧な報告で信頼を作る。'},
+  {focus:'fun',open:['fun'],say:'雰囲気作りは、ここに書いたことが全部必要。1つでも崩れるとだめ。',sub:'内装・掃除・音楽・客数・アロマ・スタッフの雰囲気・常連の雰囲気'},
+  {focus:'chara',open:['koushu','chara','chara/*'],say:'初心者講習は全員ができる状態に。キャラは、自分が真面目キャラかふざけキャラかを知るところから。'},
+  {focus:'shift',open:['shift','kintai'],say:'シフトはキャラと、担当のお客さんが来る時間で組む。勤怠は、遅刻しない・感情を出さない。'},
+  {focus:'shinki',open:['joren','joren/*','shinki','sns','sns/*'],say:'新しいお客さんはSNSから。新施策と、AIっぽくないクリエイティブで発信する。',sub:'来てくれた人は、新規割・紹介割・割引チケットでリピートにつなげる。'},
+  {focus:'ritaku',open:['ritaku','ritaku/*','senchaku'],say:'常に立卓していると、ふらっと来る人が来る。そのために高い先着ボーナス。',sub:'SNSにも「全員立卓している」写真を出す。'},
+  {focus:'floor',open:['floor'],all:true,say:'見ての通り、ほとんどが優秀なフロアの話。その日のフロアで、リングが立つかが決まる。',sub:'これが全部できて、やっとリングが立つ。だから一人ひとりが、店全体のパーツ。'},
+];
+
+const TAGS=[{k:'done',l:'決定'},{k:'todo',l:'ToDo'},{k:'open',l:'未決'},{k:'check',l:'要確認'}];
+let uid=0;const newId=()=>'n'+Date.now().toString(36)+(uid++).toString(36);
+function parse(src){
+  const root={children:[]};const stack=[{d:-1,n:root}];const pend=[];
+  for(const raw of src.split('\n')){
+    if(!raw.trim())continue;
+    const d=Math.floor(raw.search(/\S/)/2);const line=raw.trim();
+    while(stack.at(-1).d>=d)stack.pop();
+    if(line.startsWith('→')){pend.push([stack.at(-1).n,line.slice(1).trim()]);continue}
+    const [text,tagStr='',note='']=line.split('::').map(s=>s.trim());
+    const n={id:null,text,note,tags:{},ask:'',children:[],links:[],open:d<1,ox:0,oy:0};
+    tagStr.split(',').map(s=>s.trim()).filter(Boolean).forEach(t=>{
+      if(t==='決')n.tags.done=true;else if(t==='未')n.tags.open=true;else if(t==='確')n.tags.check=true;
+      else if(t.startsWith('todo='))n.tags.todo=t.slice(5);else if(t.startsWith('ask='))n.ask=t.slice(4);else if(t.startsWith('id='))n.id=t.slice(3);
+    });
+    if(!n.id)n.id=newId();
+    stack.at(-1).n.children.push(n);stack.push({d,n});
+  }
+  pend.forEach(([p,key])=>p.links.push(key));
+  return root.children[0];
+}
+
+/* 保存：この端末のブラウザに自動で */
+const LS='shikou-map:ring-v3';
+function load(){try{const s=localStorage.getItem(LS);if(s){const o=JSON.parse(s);if(o&&o.root)return o.root}}catch(e){}return parse(SRC)}
+let ROOT=load();
+const savedEl=document.getElementById('saved');
+function persist(){if(PRESENT)return;try{localStorage.setItem(LS,JSON.stringify({v:3,root:ROOT,at:Date.now()}));savedEl.textContent='保存済み'}catch(e){savedEl.textContent='保存できません（書き出してください）'}}
+
+let undoS=[],redoS=[];
+const snap=()=>JSON.stringify(ROOT);
+function commit(before){undoS.push(before);if(undoS.length>150)undoS.shift();redoS=[];persist();updUR()}
+function updUR(){document.getElementById('undo').disabled=!undoS.length;document.getElementById('redo').disabled=!redoS.length}
+function restore(s){const selId=SEL&&SEL.id;ROOT=JSON.parse(s);persist();rebuild();select((selId&&BY[selId])||null);updUR()}
+function undo(){if(!undoS.length)return;redoS.push(snap());restore(undoS.pop())}
+function redo(){if(!redoS.length)return;undoS.push(snap());restore(redoS.pop())}
+
+/* 木の索引。親などはJSONに入れない */
+let ALL=[],BY={};
+const META=['parent','depth','el','tog','askEl','w','h','aw','ah','lx','ly','tx','ty','cx','cy','txEl'];
+function defMeta(n){META.forEach(k=>{const d=Object.getOwnPropertyDescriptor(n,k);if(!d||d.enumerable){const v=n[k];delete n[k];Object.defineProperty(n,k,{value:v,enumerable:false,writable:true,configurable:true})}})}
+function index(){ALL=[];BY={};(function w(n,p,d){defMeta(n);if(!n.links)n.links=[];if(n.ask==null)n.ask='';n.parent=p;n.depth=d;ALL.push(n);BY[n.id]=n;n.children.forEach(c=>w(c,n,d+1))})(ROOT,null,0);
+  ALL.forEach(n=>{n.links=n.links.filter(id=>BY[id]&&BY[id]!==n)})}
+
+const stage=document.getElementById('stage'),world=document.getElementById('world'),svg=document.getElementById('edges');
+const POS={};
+const hasTag=(n,k)=>k==='todo'?(n.tags.todo!=null&&n.tags.todo!==false):!!n.tags[k];
+function tagList(n){const a=[];if(n.tags.done)a.push({k:'done',l:'決定'});if(hasTag(n,'todo'))a.push({k:'todo',l:'ToDo'+(n.tags.todo?' '+n.tags.todo:'')});if(n.tags.open)a.push({k:'open',l:'未決'});if(n.tags.check)a.push({k:'check',l:'要確認'});return a}
+function makeEl(n){
+  const el=document.createElement('div');el.className='node l'+Math.min(n.depth,3);el.tabIndex=0;el.dataset.id=n.id;el.setAttribute('role','treeitem');
+  const t=document.createElement('span');t.className='tx';t.textContent=n.text||' ';el.appendChild(t);n.txEl=t;
+  const tg=tagList(n);if(n.note&&n.depth>0)tg.push({k:'note',l:'メモ'});
+  if(tg.length&&n.depth>0){const b=document.createElement('div');b.className='tags';tg.forEach(x=>{const s=document.createElement('span');s.className='chip t-'+x.k;s.textContent=x.l;b.appendChild(s)});el.appendChild(b)}
+  if(n.children.length){el.style.paddingRight=(n.depth===0?34:26)+'px';const b=document.createElement('button');b.className='tog';b.setAttribute('aria-label','開く・閉じる');n.tog=b;el.appendChild(b)}else n.tog=null;
+  if(n.ask){const a=document.createElement('div');a.className='ask';a.textContent=n.ask;n.askEl=a;world.appendChild(a)}else n.askEl=null;
+  return el}
+function rebuild(){
+  ALL.forEach(n=>{if(n.el&&n.cx!=null)POS[n.id]=[n.cx,n.cy]});
+  world.querySelectorAll('.node,.ask').forEach(e=>e.remove());
+  index();
+  ALL.forEach(n=>{n.el=makeEl(n);world.appendChild(n.el);const p=POS[n.id];n.cx=p?p[0]:null;n.cy=p?p[1]:null});
+  document.getElementById('title').textContent=ROOT.text;document.title=ROOT.text+' 思考マップ';
+  updateFilterCounts();applyDim();layout()}
+
+function visible(){const v=[];(function w(n){v.push(n);if(n.open)n.children.forEach(w)})(ROOT);return v}
+function countDesc(n){let c=0;(function w(m){m.children.forEach(k=>{c++;w(k)})})(n);return c}
+const GY=14;let VIS=[];
+const showAsk=n=>n.askEl&&n.open&&n.children.length;
+function gapOf(n){return showAsk(n)?n.aw+70:60}
+function layout(){
+  const vis=visible();const set=new Set(vis);
+  ALL.forEach(n=>{n.el.style.display=set.has(n)?'':'none';if(n.askEl)n.askEl.style.display=set.has(n)&&showAsk(n)?'':'none';if(n.tog)n.tog.textContent=n.open?'−':'+'+countDesc(n)});
+  vis.forEach(n=>{n.w=n.el.offsetWidth;n.h=n.el.offsetHeight;if(showAsk(n)){n.aw=n.askEl.offsetWidth;n.ah=n.askEl.offsetHeight}});
+  let y=0;
+  (function place(n,x){n.lx=x;const kids=n.open?n.children:[];
+    if(!kids.length){n.ly=y;y+=n.h+GY;return}
+    kids.forEach(c=>place(c,x+n.w+gapOf(n)));
+    const top=kids[0].ly,bot=kids.at(-1).ly+kids.at(-1).h;n.ly=(top+bot)/2-n.h/2;
+    if(n.ly+n.h>y)y=n.ly+n.h+GY;y+=n.depth<=1?30:6})(ROOT,0);
+  accumulate();
+  vis.forEach(n=>{if(n.cx==null){const p=n.parent;n.cx=p&&p.cx!=null?p.cx:n.tx;n.cy=p&&p.cy!=null?p.cy:n.ty}});
+  ALL.forEach(n=>{if(!set.has(n)){n.cx=null;n.cy=null}});
+  VIS=vis;kick();if(typeof markDepth==='function')markDepth()}
+function accumulate(){(function acc(n,ax,ay){n.tx=n.lx+ax+n.ox;n.ty=n.ly+ay+n.oy;(n.open?n.children:[]).forEach(c=>acc(c,ax+n.ox,ay+n.oy))})(ROOT,0,0)}
+
+let anim=false;const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function kick(){if(!anim){anim=true;requestAnimationFrame(step)}}
+function step(){let moving=false;
+  VIS.forEach(n=>{if(n===dragNode){n.cx=n.tx;n.cy=n.ty}const dx=n.tx-n.cx,dy=n.ty-n.cy;
+    if(reduce||Math.abs(dx)+Math.abs(dy)<.5){n.cx=n.tx;n.cy=n.ty}else{n.cx+=dx*.22;n.cy+=dy*.22;moving=true}
+    n.el.style.transform=`translate(${n.cx}px,${n.cy}px)`;
+    if(showAsk(n))n.askEl.style.transform=`translate(${n.cx+n.w+22}px,${n.cy+n.h/2-n.ah/2}px)`});
+  drawEdges();drawMini();placeCtx();
+  if(moving)requestAnimationFrame(step);else anim=false}
+/* 矢印：親 →（矢印の名前）→ 子。Miroと同じ灰色の線 */
+function out(p){return showAsk(p)?{x:p.cx+p.w+22+p.aw,y:p.cy+p.h/2}:{x:p.cx+p.w,y:p.cy+p.h/2}}
+function drawEdges(){const parts=[];const vset=new Set(VIS);
+  const arrow=(x,y,op)=>`<path d="M${x-7},${y-4.5} L${x},${y} L${x-7},${y+4.5}" fill="none" stroke="var(--line)" stroke-opacity="${op}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`;
+  VIS.forEach(p=>{
+    const dimP=p.el.classList.contains('dim');
+    if(showAsk(p)){const y=p.cy+p.h/2;parts.push(`<path d="M${p.cx+p.w},${y} L${p.cx+p.w+22},${y}" stroke="var(--line)" stroke-opacity="${dimP?.15:.7}" stroke-width="1.8"/>`)}
+    if(p.open)p.children.forEach(n=>{if(!vset.has(n))return;const o=out(p);const x2=n.cx-2,y2=n.cy+n.h/2,mx=o.x+Math.max(16,(x2-o.x)/2);const op=(n.el.classList.contains('dim')||n.el.classList.contains('far'))?.18:.7;
+      parts.push(`<path d="M${o.x},${o.y} C${mx},${o.y} ${mx},${y2} ${x2},${y2}" fill="none" stroke="var(--line)" stroke-opacity="${op}" stroke-width="1.8" stroke-linecap="round"/>`+arrow(x2,y2,op))});
+    p.links.forEach(id=>{const n=BY[id];if(!n||!vset.has(n))return;const o=out(p);const x2=n.cx-2,y2=n.cy+n.h/2;const bend=Math.max(60,Math.abs(x2-o.x)*.4);
+      parts.push(`<path d="M${o.x},${o.y} C${o.x+bend},${o.y} ${x2-bend},${y2} ${x2},${y2}" fill="none" stroke="var(--line)" stroke-opacity="${dimP?.12:.5}" stroke-width="1.6" stroke-dasharray="5 5"/>`+arrow(x2,y2,dimP?.12:.5))})});
+  svg.innerHTML=parts.join('')}
+
+let tx=40,ty=80,k=1;
+function apply(){world.style.transform=`translate(${tx}px,${ty}px) scale(${k})`;document.getElementById('zv').textContent=Math.round(k*100)+'%';drawMini();placeCtx()}
+function zoomAt(f,px,py){const nk=Math.min(2.5,Math.max(.08,k*f));tx=px-(px-tx)*nk/k;ty=py-(py-ty)*nk/k;k=nk;apply()}
+let camAnim=null;
+function flyTo(ntx,nty,nk,dur){cancelAnimationFrame(camAnim);const s={tx,ty,k},t0=performance.now(),D=reduce?1:(dur||420);
+  const f=now=>{const p=Math.min(1,(now-t0)/D),e=1-Math.pow(1-p,3);tx=s.tx+(ntx-s.tx)*e;ty=s.ty+(nty-s.ty)*e;k=s.k+(nk-s.k)*e;apply();if(p<1)camAnim=requestAnimationFrame(f)};camAnim=requestAnimationFrame(f)}
+function bounds(list){let a=1e9,b=1e9,c=-1e9,d=-1e9;list.forEach(n=>{a=Math.min(a,n.tx);b=Math.min(b,n.ty);c=Math.max(c,n.tx+n.w);d=Math.max(d,n.ty+n.h)});return{x:a,y:b,w:Math.max(1,c-a),h:Math.max(1,d-b)}}
+function viewRect(){const top=document.getElementById('top').getBoundingClientRect().bottom+12;const narrow=innerWidth<=720;
+  let pr=0,pb=70;if(PRESENT){pb=document.getElementById('talk').offsetHeight+30}else if(!panel.hidden){if(narrow)pb=panel.offsetHeight+80;else pr=panel.offsetWidth+24}
+  return{x:16,y:top,w:Math.max(100,innerWidth-32-pr),h:Math.max(100,innerHeight-top-pb)}}
+function fitTo(list,max){const b=bounds(list),v=viewRect();const nk=Math.min(max||1.2,Math.max(.08,Math.min(v.w/b.w,v.h/b.h)));flyTo(v.x+(v.w-b.w*nk)/2-b.x*nk,v.y+(v.h-b.h*nk)/2-b.y*nk,nk)}
+function fit(){fitTo(VIS)}
+function focusNode(n){const v=viewRect();const nk=Math.max(k,.8);flyTo(v.x+v.w/2-(n.tx+n.w/2)*nk,v.y+v.h/2-(n.ty+n.h/2)*nk,nk)}
+function ensureVisible(n){const r=n.el.getBoundingClientRect(),v=viewRect();if(r.left<v.x||r.right>v.x+v.w||r.top<v.y||r.bottom>v.y+v.h)focusNode(n)}
+
+/* 指・マウス */
+const pts=new Map();let mode=null,start=null,dragNode=null,moved=false,pinch=null,dropT=null,lastTap={id:null,t:0};
+stage.addEventListener('pointerdown',e=>{
+  if(e.target.closest('.tog')||e.target.closest('[contenteditable="true"]'))return;
+  stage.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pts.size===2){const [a,b]=[...pts.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),k};mode='pinch';endDrag(false);return}
+  const el=e.target.closest('.node');moved=false;start={x:e.clientX,y:e.clientY,tx,ty};
+  if(el&&!PRESENT){mode='node';dragNode=BY[el.dataset.id];start.ox=dragNode.ox;start.oy=dragNode.oy;start.snap=snap()}
+  else{mode='pan';stage.classList.add('panning')}});
+stage.addEventListener('pointermove',e=>{
+  if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(mode==='pinch'&&pts.size===2){const [a,b]=[...pts.values()];zoomAt(pinch.k*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d/k,(a.x+b.x)/2,(a.y+b.y)/2);return}
+  if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;
+  if(mode==='pan'){tx=start.tx+dx;ty=start.ty+dy;apply()}
+  else if(mode==='node'&&moved&&dragNode){
+    if(!dragNode.parent){tx=start.tx+dx;ty=start.ty+dy;apply();return}
+    dragNode.el.classList.add('dragging');ctx.hidden=true;dragNode.ox=start.ox+dx/k;dragNode.oy=start.oy+dy/k;accumulate();kick();
+    dragNode.el.style.pointerEvents='none';const under=document.elementFromPoint(e.clientX,e.clientY);dragNode.el.style.pointerEvents='';
+    const tEl=under&&under.closest('.node');const t=tEl&&BY[tEl.dataset.id];
+    const ok=t&&t!==dragNode&&t!==dragNode.parent&&!isAnc(dragNode,t);
+    if(dropT&&dropT!==t)dropT.el.classList.remove('drop');dropT=ok?t:null;if(dropT)dropT.el.classList.add('drop')}});
+function endDrag(save){if(!dragNode)return;dragNode.el.classList.remove('dragging');if(dropT)dropT.el.classList.remove('drop');
+  if(save&&moved&&dragNode.parent){
+    if(dropT){const n=dragNode,t=dropT;n.parent.children.splice(n.parent.children.indexOf(n),1);n.ox=0;n.oy=0;t.children.push(n);t.open=true;
+      commit(start.snap);dragNode=null;dropT=null;rebuild();select(BY[n.id]);toast('「'+short(t.text)+'」の下へ移しました',true);return}
+    commit(start.snap)}
+  dragNode=null;dropT=null}
+function up(e){
+  pts.delete(e.pointerId);stage.classList.remove('panning');
+  if(mode==='node'&&dragNode){const n=dragNode;
+    if(moved)endDrag(true);else{dragNode=null;const now=performance.now();
+      if(lastTap.id===n.id&&now-lastTap.t<350){startEdit(n);lastTap={id:null,t:0}}else{select(n);lastTap={id:n.id,t:now}}}}
+  else if(mode==='pan'&&!moved){if(PRESENT){const el=e.target.closest('.node');if(el){const n=BY[el.dataset.id];if(n.children.length)toggle(n)}}else{select(null);closeMore()}}
+  if(pts.size===0){mode=null;start=null}}
+stage.addEventListener('pointerup',up);
+stage.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);endDrag(false);mode=null;start=null;stage.classList.remove('panning')});
+stage.addEventListener('wheel',e=>{if(e.target.closest('[contenteditable="true"]'))return;e.preventDefault();
+  const mouse=e.deltaMode===1||(e.deltaX===0&&Math.abs(e.deltaY)>=50&&Number.isInteger(e.deltaY));
+  if(e.ctrlKey||e.metaKey||mouse)zoomAt(Math.exp(-e.deltaY*(e.ctrlKey?.012:.0018)),e.clientX,e.clientY);else{tx-=e.deltaX;ty-=e.deltaY;apply()}},{passive:false});
+world.addEventListener('click',e=>{const b=e.target.closest('.tog');if(!b)return;e.stopPropagation();toggle(BY[b.parentElement.dataset.id])});
+function toggle(n){if(!n.children.length)return;n.open=!n.open;persist();layout()}
+
+/* 文字を直す */
+let editing=null;
+function startEdit(n,sel){if(PRESENT)return;if(editing)finishEdit(true);select(n);editing={n,before:snap(),orig:n.text};const t=n.txEl;t.contentEditable='true';t.textContent=n.text;ctx.hidden=true;
+  t.focus();const r=document.createRange();r.selectNodeContents(t);if(sel==='end')r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+function finishEdit(keep){if(!editing)return;const {n,before,orig}=editing;editing=null;const t=n.txEl;t.contentEditable='false';
+  const v=t.innerText.replace(/ /g,' ').replace(/\n+$/,'').trim();
+  if(!orig&&n.parent&&(!v||!keep)){/* 足したばかりで空のまま → 足したこと自体を取り消す */
+    const p=n.parent;p.children.splice(p.children.indexOf(n),1);undoS.pop();persist();updUR();rebuild();select(BY[p.id]);return}
+  if(keep&&v&&v!==orig){n.text=v;if(orig)commit(before);else persist()}else t.textContent=n.text||' ';
+  rebuild();select(BY[n.id]);BY[n.id].el.focus({preventScroll:true})}
+world.addEventListener('keydown',e=>{const t=e.target.closest('[contenteditable="true"]');if(!t)return;e.stopPropagation();
+  if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();finishEdit(true)}
+  else if(e.key==='Escape'){e.preventDefault();finishEdit(false)}
+  else if(e.key==='Tab'&&!e.isComposing){e.preventDefault();const id=editing.n.id;finishEdit(true);if(BY[id])addChild(BY[id])}});
+world.addEventListener('focusout',e=>{if(editing&&e.target===editing.n.txEl)setTimeout(()=>{if(editing&&document.activeElement!==editing.n.txEl)finishEdit(true)},0)});
+
+/* 足す・消す・並べ替え */
+const blank=()=>({id:newId(),text:'',note:'',tags:{},ask:'',children:[],links:[],open:true,ox:0,oy:0});
+function addChild(p){const before=snap(),n=blank();p.children.push(n);p.open=true;commit(before);rebuild();setTimeout(()=>{ensureVisible(BY[n.id]);startEdit(BY[n.id])},30)}
+function addSibling(s){if(!s.parent)return addChild(s);const before=snap(),n=blank();const arr=s.parent.children;arr.splice(arr.indexOf(s)+1,0,n);commit(before);rebuild();setTimeout(()=>{ensureVisible(BY[n.id]);startEdit(BY[n.id])},30)}
+function removeNode(n,before,silent){if(!n.parent)return;before=before||snap();const p=n.parent,arr=p.children,i=arr.indexOf(n);const cnt=countDesc(n);arr.splice(i,1);commit(before);rebuild();
+  const next=arr[Math.min(i,arr.length-1)]||p;select(BY[next.id]);if(!silent)toast(cnt?`「${short(n.text)}」と下の${cnt}枚を消しました`:`「${short(n.text)}」を消しました`,true)}
+function moveSib(n,d){if(!n.parent)return;const arr=n.parent.children,i=arr.indexOf(n),j=i+d;if(j<0||j>=arr.length)return;const before=snap();arr.splice(i,1);arr.splice(j,0,n);commit(before);rebuild();select(BY[n.id])}
+function askRemove(n){if(!n.parent)return;const c=countDesc(n);if(c>=3)ask(`「${short(n.text)}」を削除しますか？`,`下の段にある${c}枚も一緒に消えます。すぐ後なら「元に戻す」で取り消せます。`,'削除する',()=>removeNode(n));else removeNode(n)}
+const short=s=>(s||'').length>14?s.slice(0,14)+'…':(s||'');
+
+const ctx=document.getElementById('ctx');
+function placeCtx(){if(PRESENT||!SEL||editing||(dragNode&&moved)||!SEL.el||SEL.el.style.display==='none'){ctx.hidden=true;return}
+  const r=SEL.el.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight){ctx.hidden=true;return}ctx.hidden=false;
+  const w=ctx.offsetWidth,h=ctx.offsetHeight;const x=Math.min(innerWidth-w/2-8,Math.max(w/2+8,r.left+r.width/2));let y=r.top-10;
+  const topB=document.getElementById('top').getBoundingClientRect().bottom+h+6;if(y<topB)y=r.bottom+10+h;
+  ctx.style.left=x+'px';ctx.style.top=y+'px';ctx.querySelector('[data-a="del"]').disabled=!SEL.parent;ctx.querySelector('[data-a="sib"]').disabled=!SEL.parent}
+ctx.addEventListener('pointerdown',e=>e.stopPropagation());
+ctx.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||!SEL)return;const a=b.dataset.a;
+  if(a==='child')addChild(SEL);else if(a==='sib')addSibling(SEL);else if(a==='edit')startEdit(SEL,'end');else if(a==='del')askRemove(SEL)});
+
+/* 右のパネル */
+const panel=document.getElementById('panel');let SEL=null;
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function select(n){if(SEL&&SEL.el)SEL.el.classList.remove('sel');SEL=n;
+  if(!n){if(FILTER)showFilterList();else panel.hidden=true;placeCtx();return}
+  n.el.classList.add('sel');renderPanel();placeCtx()}
+function renderPanel(){const n=SEL;if(!n)return;
+  const path=[];let p=n.parent;while(p){path.unshift(p.ask?p.text+'（'+p.ask+'）':p.text);p=p.parent}
+  const linkedFrom=ALL.filter(x=>x.links.includes(n.id));
+  panel.innerHTML=`<button class="x" data-p="close" aria-label="閉じる">×</button>
+    <div class="crumb">${esc(path.join(' › '))||'ゴール'}</div><h2>${esc(n.text)}</h2>
+    <span class="lbl">会話のメモ</span><textarea id="pNote" placeholder="話した内容・理由など">${esc(n.note||'')}</textarea>
+    <span class="lbl">右に出る矢印の名前</span><input class="inp" id="pAsk" value="${esc(n.ask||'')}" placeholder="例：何が必要か">
+    <span class="lbl">札</span><div class="tagrow">${TAGS.map(t=>`<button class="tagbtn chip t-${t.k} ${hasTag(n,t.k)?'on':''}" data-tag="${t.k}" aria-pressed="${hasTag(n,t.k)}">${t.l}</button>`).join('')}</div>
+    ${hasTag(n,'todo')?`<span class="lbl">ToDo の担当・期限</span><input class="inp" id="pWho" value="${esc(n.tags.todo||'')}" placeholder="例：神崎/明日">`:''}
+    ${linkedFrom.length||n.links.length?`<span class="lbl">点線でつながっている所</span><div class="list">${[...n.links.map(id=>BY[id]),...linkedFrom].map(c=>`<button class="li" data-go="${c.id}">${esc(c.text)}</button>`).join('')}</div>`:''}
+    ${n.children.length?`<span class="lbl">${esc(n.ask||'この下')}（${n.children.length}）</span><div class="list">${n.children.map(c=>`<button class="li" data-go="${c.id}">${esc(c.text)}${c.children.length?`<small>下に${countDesc(c)}枚</small>`:''}</button>`).join('')}</div>`:''}`;
+  panel.hidden=false}
+panel.addEventListener('pointerdown',e=>e.stopPropagation());
+panel.addEventListener('click',e=>{
+  if(e.target.closest('[data-p="close"]')){if(FILTER&&!SEL)setFilter(null);else select(null);return}
+  const tg=e.target.closest('[data-tag]');if(tg&&SEL){const before=snap(),kk=tg.dataset.tag;
+    if(kk==='todo'){if(hasTag(SEL,'todo'))delete SEL.tags.todo;else SEL.tags.todo=''}else{if(SEL.tags[kk])delete SEL.tags[kk];else SEL.tags[kk]=true}
+    commit(before);const id=SEL.id;rebuild();select(BY[id]);if(kk==='todo'&&hasTag(BY[id],'todo'))document.getElementById('pWho')?.focus();return}
+  const g=e.target.closest('[data-go]');if(g){const n=BY[g.dataset.go];openPath(n);layout();setTimeout(()=>{focusNode(n);select(n)},60)}});
+let fieldBefore=null;
+panel.addEventListener('focusin',e=>{if(e.target.matches('textarea,.inp'))fieldBefore=snap()});
+panel.addEventListener('input',e=>{if(!SEL)return;const id=e.target.id;
+  if(id==='pNote')SEL.note=e.target.value;else if(id==='pWho')SEL.tags.todo=e.target.value.trim();else if(id==='pAsk')SEL.ask=e.target.value.trim();persist()});
+panel.addEventListener('change',e=>{if(!SEL||!e.target.matches('textarea,.inp'))return;if(fieldBefore&&fieldBefore!==snap())commit(fieldBefore);fieldBefore=snap();const id=SEL.id;rebuild();select(BY[id])});
+panel.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'&&e.target.matches('.inp'))e.target.blur()});
+function openPath(n){let p=n.parent;while(p){p.open=true;p=p.parent}persist()}
+function isAnc(a,n){let p=n.parent;while(p){if(p===a)return true;p=p.parent}return false}
+
+/* 札でしぼる（札のあるものだけ出す） */
+let FILTER=null;const fbox=document.getElementById('filters');
+TAGS.forEach(f=>{const b=document.createElement('button');b.className='fchip chip t-'+f.k;b.dataset.f=f.k;b.innerHTML=`${f.l}<span class="n"></span>`;b.setAttribute('aria-pressed','false');
+  b.onclick=()=>setFilter(FILTER===f.k?null:f.k);fbox.appendChild(b)});
+function updateFilterCounts(){fbox.querySelectorAll('.fchip').forEach(b=>{const c=ALL.filter(x=>hasTag(x,b.dataset.f)).length;b.querySelector('.n').textContent=c;b.hidden=!c&&FILTER!==b.dataset.f})}
+function applyDim(){const hit=FILTER?ALL.filter(x=>hasTag(x,FILTER)):[];ALL.forEach(n=>{const d=!!FILTER&&!hit.includes(n)&&!hit.some(h=>isAnc(n,h));n.el.classList.toggle('dim',d);if(n.askEl)n.askEl.classList.toggle('dim',d)})}
+function setFilter(f){FILTER=f;fbox.querySelectorAll('.fchip').forEach(b=>{b.classList.toggle('on',b.dataset.f===f);b.setAttribute('aria-pressed',b.dataset.f===f)});
+  if(f)ALL.filter(x=>hasTag(x,f)).forEach(openPath);applyDim();updateFilterCounts();layout();
+  if(SEL){SEL.el.classList.remove('sel');SEL=null}
+  if(f){showFilterList();setTimeout(fit,60)}else panel.hidden=true;placeCtx()}
+function showFilterList(){const f=TAGS.find(x=>x.k===FILTER);const hit=ALL.filter(x=>hasTag(x,FILTER));
+  panel.innerHTML=`<button class="x" data-p="close" aria-label="閉じる">×</button><h2>${f.l}　${hit.length}件</h2><div class="list">${hit.map(n=>
+    `<button class="li" data-go="${n.id}">${esc(n.text)}<small>${esc(FILTER==='todo'?(n.tags.todo||'担当なし'):(n.parent?n.parent.text:''))}</small></button>`).join('')||'<span style="color:var(--sub);font-size:13px">まだありません</span>'}</div>`;
+  panel.hidden=false}
+
+/* さがす */
+const qi=document.getElementById('q');let hits=[],hi=0;
+function runSearch(){const s=qi.value.trim();ALL.forEach(n=>n.el.classList.remove('hit'));hits=[];hi=0;if(!s)return;
+  hits=ALL.filter(n=>(n.text+' '+(n.note||'')).includes(s));hits.forEach(openPath);layout();hits.forEach(n=>n.el.classList.add('hit'));if(hits[0])setTimeout(()=>focusNode(hits[0]),60)}
+qi.addEventListener('input',runSearch);
+qi.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'&&hits.length){hi=(hi+1)%hits.length;focusNode(hits[hi]);select(hits[hi])}if(e.key==='Escape'){qi.value='';runSearch();qi.blur()}});
+
+/* 順に話す（現場会議用） */
+let PRESENT=null;
+const talk=document.getElementById('talk'),dots=document.getElementById('dots');
+function stepsOK(){return STEPS.filter(s=>BY[s.focus])}
+function startTalk(){if(editing)finishEdit(true);if(FILTER)setFilter(null);select(null);closeMore();help.hidden=true;
+  PRESENT={i:0,saved:ALL.map(n=>[n.id,n.open]),steps:stepsOK()};document.body.classList.add('presenting');talk.hidden=false;
+  document.getElementById('talkBtn').textContent='■ 説明を終える';
+  dots.innerHTML=PRESENT.steps.map((_,i)=>`<button class="dot" data-i="${i}" aria-label="説明 ${i+1}／${PRESENT.steps.length} へ"></button>`).join('');showStep(0)}
+function expandKey(key,set){const m=key.match(/^([^/]+)(?:\/(\*|\d+))?$/);if(!m)return;const n=BY[m[1]];if(!n)return;set.add(n);
+  if(m[2]==='*'){(function w(x){set.add(x);x.children.forEach(w)})(n)}else if(m[2]!=null){const c=n.children[+m[2]];if(c)(function w(x){set.add(x);x.children.forEach(w)})(c)}}
+function showStep(i){const S=PRESENT.steps;i=Math.max(0,Math.min(S.length-1,i));PRESENT.i=i;const s=S[i];
+  const open=new Set();S.slice(0,i+1).forEach(st=>st.open.forEach(key=>expandKey(key,open)));
+  if(s.all){ALL.forEach(n=>n.open=n.depth<1||n===BY.floor)}else ALL.forEach(n=>n.open=open.has(n));
+  const f=BY[s.focus];let p=f.parent;while(p){p.open=true;p=p.parent}
+  ALL.forEach(n=>n.el.classList.remove('focus','far'));
+  layout();
+  if(!s.all&&i>0){const keep=new Set([f]);let a=f.parent;while(a){keep.add(a);a=a.parent}(function w(x){x.children.forEach(c=>{keep.add(c);w(c)})})(f);if(i===1)ROOT.children.forEach(c=>keep.add(c));ALL.forEach(n=>{if(!keep.has(n))n.el.classList.add('far')})}
+  setTimeout(()=>{
+    if(s.all){fitTo(VIS)}else{const list=[f];if(f.open)(function w(x){x.children.forEach(c=>{list.push(c);if(c.open)w(c)})})(f);
+      if(i===1)list.push(...ROOT.children);fitTo(list,1.15)}
+    if(i>0&&!s.all)f.el.classList.add('focus')},40);
+  document.getElementById('say').innerHTML=esc(s.say)+(s.sub?`<small>${esc(s.sub)}</small>`:'');
+  document.getElementById('tCnt').textContent=`${i+1} / ${S.length}`;
+  dots.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('on',j===i));
+  document.getElementById('tPrev').disabled=i===0;document.getElementById('tNext').textContent=i===S.length-1?'最初から':'次へ ›'}
+function endTalk(){if(!PRESENT)return;const m=new Map(PRESENT.saved);ALL.forEach(n=>{if(m.has(n.id))n.open=m.get(n.id);n.el.classList.remove('focus','far')});PRESENT=null;
+  document.body.classList.remove('presenting');talk.hidden=true;document.getElementById('talkBtn').textContent='▶ 順に説明';layout();setTimeout(fit,40)}
+document.getElementById('talkBtn').onclick=()=>PRESENT?endTalk():startTalk();
+document.getElementById('tPrev').onclick=()=>showStep(PRESENT.i-1);
+document.getElementById('tNext').onclick=()=>showStep(PRESENT.i===PRESENT.steps.length-1?0:PRESENT.i+1);
+document.getElementById('tEnd').onclick=endTalk;
+dots.addEventListener('click',e=>{const d=e.target.closest('.dot');if(d)showStep(+d.dataset.i)});
+talk.addEventListener('pointerdown',e=>e.stopPropagation());
+
+/* 上の道具 */
+function markDepth(){let d=null;for(const c of [2,3,4,99]){if(ALL.every(n=>!n.children.length||n.open===(n.depth<c-1))){d=c;break}}document.querySelectorAll('[data-depth]').forEach(b=>{const on=+b.dataset.depth===d;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
+document.querySelectorAll('[data-depth]').forEach(b=>b.onclick=()=>{if(PRESENT)endTalk();const d=+b.dataset.depth;ALL.forEach(n=>n.open=n.depth<d-1);persist();layout();setTimeout(fit,60)});
+document.getElementById('undo').onclick=undo;document.getElementById('redo').onclick=redo;
+document.getElementById('fit').onclick=fit;
+document.getElementById('zi').onclick=()=>zoomAt(1.25,innerWidth/2,innerHeight/2);
+document.getElementById('zo').onclick=()=>zoomAt(.8,innerWidth/2,innerHeight/2);
+const help=document.getElementById('help');
+document.getElementById('helpBtn').onclick=()=>{help.hidden=!help.hidden;closeMore()};
+document.getElementById('helpX').onclick=()=>help.hidden=true;
+const more=document.getElementById('more'),moreBtn=document.getElementById('moreBtn');
+moreBtn.onclick=()=>{more.hidden=!more.hidden;moreBtn.setAttribute('aria-expanded',!more.hidden)};
+function closeMore(){more.hidden=true;moreBtn.setAttribute('aria-expanded','false')}
+document.getElementById('mReset').onclick=()=>{const b=snap();ALL.forEach(n=>{n.ox=0;n.oy=0});commit(b);layout();closeMore();toast('配置を自動に戻しました',true)};
+document.getElementById('mExport').onclick=()=>{closeMore();const d=new Date();const name=`思考マップ_${ROOT.text}_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.json`;
+  const blob=new Blob([JSON.stringify({v:3,root:ROOT,at:Date.now()},null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('書き出しました')};
+document.getElementById('mImport').onclick=()=>{closeMore();document.getElementById('file').click()};
+document.getElementById('file').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const o=JSON.parse(await f.text());if(!o||!o.root||!o.root.text)throw 0;const b=snap();ROOT=o.root;commit(b);rebuild();select(null);setTimeout(fit,60);toast('読み込みました',true)}
+  catch(err){toast('読み込めませんでした（このマップの書き出しファイルを選んでください）')}};
+document.getElementById('mOrig').onclick=()=>{closeMore();ask('最初の内容に戻しますか？','書き足した内容と配置が消え、Miroと会話から作った最初の形に戻ります。すぐ後なら「元に戻す」で取り消せます。','戻す',()=>{const b=snap();ROOT=parse(SRC);commit(b);rebuild();select(null);setTimeout(fit,60);toast('最初の内容に戻しました',true)})};
+more.addEventListener('pointerdown',e=>e.stopPropagation());
+
+const cf=document.getElementById('confirm');let cfFn=null;
+function ask(t,b,ok,fn){document.getElementById('cfT').textContent=t;document.getElementById('cfB').textContent=b;document.getElementById('cfOk').textContent=ok;cfFn=fn;cf.hidden=false;document.getElementById('cfNo').focus()}
+document.getElementById('cfOk').onclick=()=>{cf.hidden=true;cfFn&&cfFn()};document.getElementById('cfNo').onclick=()=>cf.hidden=true;
+cf.addEventListener('pointerdown',e=>e.stopPropagation());help.addEventListener('pointerdown',e=>e.stopPropagation());
+const toastEl=document.getElementById('toast');let toastT=null;
+function toast(msg,withUndo){document.getElementById('toastMsg').textContent=msg;document.getElementById('toastBtn').hidden=!withUndo;toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>toastEl.hidden=true,4500)}
+document.getElementById('toastBtn').onclick=()=>{undo();toastEl.hidden=true};
+toastEl.addEventListener('pointerdown',e=>e.stopPropagation());
+
+/* キーボード */
+addEventListener('keydown',e=>{
+  if(e.target.matches('input,textarea')||editing)return;
+  const mod=e.metaKey||e.ctrlKey;
+  if(PRESENT){if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();if(PRESENT.i<PRESENT.steps.length-1)showStep(PRESENT.i+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();showStep(PRESENT.i-1)}else if(e.key==='Escape')endTalk();return}
+  if(mod&&(e.key==='z'||e.key==='Z')){e.preventDefault();e.shiftKey?redo():undo();return}
+  if(mod&&e.key==='y'){e.preventDefault();redo();return}
+  if(e.key==='Escape'){if(!cf.hidden){cf.hidden=true;return}help.hidden=true;closeMore();select(null);return}
+  if(SEL){
+    if(e.key==='Tab'){e.preventDefault();addChild(SEL);return}
+    if(e.key==='Enter'){e.preventDefault();e.shiftKey?startEdit(SEL,'end'):addSibling(SEL);return}
+    if(e.key==='F2'){e.preventDefault();startEdit(SEL,'end');return}
+    if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();askRemove(SEL);return}
+    if(e.key===' '){e.preventDefault();toggle(SEL);return}
+    if(e.altKey&&(e.key==='ArrowUp'||e.key==='ArrowDown')){e.preventDefault();moveSib(SEL,e.key==='ArrowUp'?-1:1);return}
+    const nav={ArrowLeft:()=>SEL.parent,ArrowRight:()=>SEL.open&&SEL.children[0],
+      ArrowUp:()=>{const a=SEL.parent?SEL.parent.children:[];return a[a.indexOf(SEL)-1]},ArrowDown:()=>{const a=SEL.parent?SEL.parent.children:[];return a[a.indexOf(SEL)+1]}}[e.key];
+    if(nav){e.preventDefault();if(e.key==='ArrowRight'&&!SEL.open&&SEL.children.length){toggle(SEL);return}const n=nav();if(n){select(n);n.el.focus({preventScroll:true});ensureVisible(n)}return}
+    if(e.key.length===1&&!mod&&!e.altKey){startEdit(SEL);return}
+  }
+  if(e.key==='f'||e.key==='F')fit();else if(e.key==='+'||e.key==='=')zoomAt(1.25,innerWidth/2,innerHeight/2);else if(e.key==='-')zoomAt(.8,innerWidth/2,innerHeight/2);
+});
+world.addEventListener('focusin',e=>{const el=e.target.closest('.node');if(el&&!editing&&!PRESENT&&SEL!==BY[el.dataset.id]&&e.target===el)select(BY[el.dataset.id])});
+
+/* 左下の全体図 */
+const mc=document.getElementById('mc'),mx=mc.getContext('2d');let MS=null;
+const MINI=['#ffd43b','#f3e27a','#9fd46c','#8fb7f5'];
+function drawMini(){if(!VIS.length||mc.offsetParent===null)return;const dpr=devicePixelRatio||1,W=mc.clientWidth,H=mc.clientHeight;
+  if(mc.width!==W*dpr){mc.width=W*dpr;mc.height=H*dpr}mx.setTransform(dpr,0,0,dpr,0,0);mx.clearRect(0,0,W,H);
+  const b=bounds(VIS.map(n=>({tx:n.cx??n.tx,ty:n.cy??n.ty,w:n.w,h:n.h})));const s=Math.min((W-16)/b.w,(H-16)/b.h);const ox=(W-b.w*s)/2-b.x*s,oy=(H-b.h*s)/2-b.y*s;MS={s,ox,oy};
+  VIS.forEach(n=>{mx.fillStyle=MINI[Math.min(n.depth,3)];mx.globalAlpha=n.el.classList.contains('dim')?.25:.95;mx.fillRect(ox+(n.cx??n.tx)*s,oy+(n.cy??n.ty)*s,Math.max(2,n.w*s),Math.max(1.5,n.h*s))});
+  mx.globalAlpha=1;mx.strokeStyle='#0a84ff';mx.lineWidth=1.5;
+  const rx=ox+(-tx/k)*s,ry=oy+(-ty/k)*s,rw=innerWidth/k*s,rh=innerHeight/k*s;const x1=Math.max(1,rx),y1=Math.max(1,ry),x2=Math.min(W-1,rx+rw),y2=Math.min(H-1,ry+rh);
+  if(x2>x1&&y2>y1)mx.strokeRect(x1,y1,x2-x1,y2-y1)}
+document.getElementById('mini').addEventListener('pointerdown',e=>{e.stopPropagation();if(!MS)return;const r=mc.getBoundingClientRect();
+  const wx=(e.clientX-r.left-MS.ox)/MS.s,wy=(e.clientY-r.top-MS.oy)/MS.s;flyTo(innerWidth/2-wx*k,innerHeight/2-wy*k,k)});
+['top','zoombar'].forEach(id=>document.getElementById(id).addEventListener('pointerdown',e=>e.stopPropagation()));
+addEventListener('resize',()=>{drawMini();placeCtx();topEnd();panelHint()});
+const topEl=document.getElementById('top');function topEnd(){document.body.classList.toggle('top-end',topEl.scrollLeft+topEl.clientWidth>=topEl.scrollWidth-4)}topEl.addEventListener('scroll',topEnd);
+function panelHint(){panel.classList.toggle('more-below',!panel.hidden&&panel.scrollTop+panel.clientHeight<panel.scrollHeight-6)}panel.addEventListener('scroll',panelHint);new MutationObserver(()=>requestAnimationFrame(panelHint)).observe(panel,{childList:true,attributes:true,attributeFilter:['hidden']});
+
+rebuild();updUR();apply();topEnd();
+try{localStorage.setItem(LS+':t','1');localStorage.removeItem(LS+':t')}catch(e){savedEl.textContent='この画面では保存されません'}
+requestAnimationFrame(()=>{VIS.forEach(n=>{n.cx=n.tx;n.cy=n.ty});kick();fit()});
+window.__map={get root(){return ROOT},get sel(){return SEL},BY:()=>BY,select:n=>select(n),addChild,addSibling,removeNode,undo,redo,startEdit,finishEdit,startTalk,showStep,endTalk,get present(){return PRESENT}};
+</script>
+</body>
+</html>
