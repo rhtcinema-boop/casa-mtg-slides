@@ -178,7 +178,7 @@ body.presenting #mini,body.presenting #zoombar,body.presenting #panel,body.prese
     <button class="btn" id="undo" aria-label="元に戻す" title="元に戻す (⌘Z)"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button>
     <button class="btn" id="redo" aria-label="やり直す" title="やり直す (⇧⌘Z)"><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/></svg></button>
     <span class="seglbl">表示する段</span><div class="seg" role="group" aria-label="表示する段">
-      <button class="btn" data-depth="2">2</button><button class="btn" data-depth="3">3</button><button class="btn" data-depth="4">4</button><button class="btn" data-depth="99">全部</button>
+      <button class="btn" data-depth="1" title="全部閉じて、ゴールだけにする">全部閉じる</button><button class="btn" data-depth="2">2</button><button class="btn" data-depth="3">3</button><button class="btn" data-depth="4">4</button><button class="btn" data-depth="99">全部</button>
     </div>
   </div>
   <div class="grp" id="filters"></div>
@@ -716,7 +716,7 @@ dots.addEventListener('click',e=>{const d=e.target.closest('.dot');if(d)showStep
 talk.addEventListener('pointerdown',e=>e.stopPropagation());
 
 /* 上の道具 */
-function markDepth(){let d=null;for(const c of [2,3,4,99]){if(ALL.every(n=>!n.children.length||n.open===(n.depth<c-1))){d=c;break}}document.querySelectorAll('[data-depth]').forEach(b=>{const on=+b.dataset.depth===d;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
+function markDepth(){let d=null;for(const c of [1,2,3,4,99]){if(ALL.every(n=>!n.children.length||n.open===(n.depth<c-1))){d=c;break}}document.querySelectorAll('[data-depth]').forEach(b=>{const on=+b.dataset.depth===d;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
 document.querySelectorAll('[data-depth]').forEach(b=>b.onclick=()=>{if(PRESENT)endTalk();const d=+b.dataset.depth;ALL.forEach(n=>n.open=n.depth<d-1);persist();layout();setTimeout(fit,60)});
 document.getElementById('undo').onclick=undo;document.getElementById('redo').onclick=redo;
 document.getElementById('fit').onclick=fit;
