@@ -1,0 +1,162 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>みずきさん ヒアリング</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#0F1613;overflow:hidden;font-family:'Noto Sans JP','Hiragino Sans',sans-serif;}
+body{counter-reset:page;}
+p,h1,h2,h3{margin:0;} table{border-collapse:collapse;}
+x-shape{display:block;clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%);}
+x-icon{display:block;border-radius:50%;background:currentColor;}
+#deck{position:fixed;inset:0;}
+.frame{position:absolute;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .35s ease;}
+.frame.on{opacity:1;pointer-events:auto;}
+.frame section{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;}
+body.grid{overflow:auto;}
+body.grid #deck{position:static;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:16px;}
+body.grid .frame{position:relative;opacity:1;pointer-events:auto;aspect-ratio:16/9;border-radius:10px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+.on section .card,.on section .row,.on section .step,.on section .bar{animation:rise 450ms ease-out both;}
+#hud{position:fixed;right:16px;bottom:14px;display:flex;gap:8px;align-items:center;color:#A9B5AE;font-size:14px;opacity:.0;transition:opacity .3s;}
+body:hover #hud,#hud.show{opacity:1;}
+#hud button{background:#1F3329;color:#F3EEE2;border:0;border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer;}
+#bar{position:fixed;left:0;bottom:0;height:3px;background:#C8922E;transition:width .3s;}
+body.grid #bar{display:none;}
+section { counter-increment: page; box-sizing: border-box; padding: 128px 128px 160px; background: #F6F3EC; color: #1C2B27; font-family: 'Noto Sans JP', 'Hiragino Sans', Arial, sans-serif; display: flex; flex-direction: column; gap: 32px; }
+section.dark { background: #16261F; color: #F3EEE2; }
+section.gold { background: #E2B04A; color: #1C2B27; }
+section.center { justify-content: center; }
+
+.eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 3px; color: #8C5E12; }
+.dark .eyebrow { color: #E2B04A; }
+.gold .eyebrow { color: #4A3208; }
+h1 { font-size: 120px; font-weight: 900; line-height: 1.15; }
+h2 { font-size: 64px; font-weight: 900; line-height: 1.25; }
+h3 { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.lead { font-size: 44px; font-weight: 700; line-height: 1.4; }
+.dark .lead { color: #E2B04A; }
+.sub { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.dark .sub { color: #BFCBC4; }
+.sub b { color: #1C2B27; }
+
+.foot { position: absolute; left: 128px; top: 952px; width: 1300px; font-size: 24px; color: #5E6863; }
+.pg { position: absolute; left: 1592px; top: 952px; width: 200px; font-size: 24px; color: #5E6863; text-align: right; font-family: 'Space Grotesk', Arial, sans-serif; }
+.pg::before { content: counter(page); }
+.dark .foot { color: #A9B5AE; }
+.dark .pg { color: #A9B5AE; }
+.gold .foot { color: #4A3208; }
+.gold .pg { color: #4A3208; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.card { background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 36px 40px; display: flex; flex-direction: column; gap: 14px; }
+.card.hi { border: 4px solid #C8922E; }
+.card.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.card .lbl { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.card.dk .lbl { color: #E2B04A; }
+.card .txt { font-size: 32px; line-height: 1.5; }
+.card .note { font-size: 24px; line-height: 1.5; color: #5E6863; }
+.card.dk .note { color: #BFCBC4; }
+
+.numrow { display: flex; align-items: flex-end; gap: 12px; }
+.num { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; }
+.unit { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.mid { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 64px; font-weight: 700; line-height: 1.1; }
+.arr { width: 56px; height: 28px; background: #C8922E; flex: none; }
+.numrow .arr { margin-bottom: 24px; }
+
+.rows { display: flex; flex-direction: column; }
+.row { display: flex; gap: 36px; align-items: flex-start; padding: 22px 0; border-top: 2px solid #DDD4C2; }
+.row .no { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; color: #8C5E12; width: 80px; line-height: 1.3; }
+.row .body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.row .t { font-size: 44px; font-weight: 700; line-height: 1.3; }
+.row .s { font-size: 32px; line-height: 1.5; color: #4A5550; }
+.gold .row { border-top: 2px solid #B9862C; }
+.gold .row .no { color: #4A3208; }
+.gold .row .s { color: #3A2A0A; }
+
+.kvs { display: flex; flex-direction: column; gap: 10px; }
+.kv { display: flex; gap: 24px; align-items: flex-start; }
+.kv .k { width: 130px; flex: none; font-size: 24px; font-weight: 700; color: #8C5E12; line-height: 2; }
+.kv .v { flex: 1; font-size: 32px; line-height: 1.5; }
+
+.tag { align-self: flex-start; font-size: 24px; font-weight: 700; background: #F1DDB0; color: #5C3B06; padding: 6px 20px; border-radius: 40px; }
+.tag.warn { background: #F5D3C6; color: #7A2A10; }
+
+.flow { display: flex; align-items: center; gap: 20px; }
+.step { flex: 1; background: #FFFDF8; border: 2px solid #E3DBCA; border-radius: 24px; padding: 32px 36px; display: flex; flex-direction: column; gap: 10px; }
+.step.dk { background: #16261F; border: 2px solid #16261F; color: #F3EEE2; }
+.step .lbl { font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #8C5E12; }
+.step.dk .lbl { color: #E2B04A; }
+.step .txt { font-size: 32px; line-height: 1.5; font-weight: 700; }
+
+.quote { font-size: 44px; font-weight: 700; line-height: 1.45; border-left: 8px solid #C8922E; padding-left: 36px; }
+
+.bars { display: flex; flex-direction: column; gap: 24px; }
+.bar { display: flex; align-items: center; gap: 32px; }
+.bar .name { width: 280px; flex: none; font-size: 32px; font-weight: 700; }
+.bar .track { flex: 1; height: 64px; background: #E6DFD0; border-radius: 12px; overflow: hidden; display: flex; }
+.bar .fill { height: 64px; background: #16261F; }
+.bar .fill.g { background: #C8922E; }
+.bar .val { width: 220px; flex: none; font-family: 'Space Grotesk', 'Noto Sans JP', Arial, sans-serif; font-size: 44px; font-weight: 700; text-align: right; }
+
+table { width: 100%; font-size: 32px; color: #1C2B27; }
+th { color: #F3EEE2; padding: 16px 24px; }
+td { padding: 16px 24px; }
+tr.hd { background: #16261F; }
+tr.z { background: #EFE8D9; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0px); } }
+.card { animation: rise 450ms ease-out both; }
+.row { animation: rise 450ms ease-out both; }
+.step { animation: rise 450ms ease-out both; }
+.bar { animation: rise 450ms ease-out both; }
+
+.tag.ok { background: #D7E9DC; color: #1F5A3A; }
+.tag.open { background: #F7E7C2; color: #5C3B06; }
+.gold .tag.open { background: #F6EBCF; color: #4A3208; }
+.row .tag { margin-top: 10px; flex: none; }
+.cols.top { align-items: start; }
+.alert { display: flex; align-items: center; gap: 24px; background: #F5D3C6; color: #7A2A10; border-radius: 20px; padding: 24px 32px; }
+.alert .ic { width: 40px; height: 40px; color: #7A2A10; flex: none; }
+.alert .at { font-size: 32px; font-weight: 700; line-height: 1.4; }
+.today { color: #1F6B45; }
+.later { color: #9A5B00; }
+.card.mute { background: #EFEBE2; border: 2px solid #E3DBCA; }
+
+.fit{display:flex;flex-direction:column;gap:32px;transform-origin:0 0;flex:none;}
+section.center .fit{gap:28px;}
+</style></head><body>
+<div id="deck"><div class="frame"><section class="dark center"><div class="fit"><p class="eyebrow">casa｜社外秘</p><h1>みずきさん<br>ヒアリング</h1><p class="lead">本人の本音と、店長としての自覚を確かめる</p><p class="sub">やべさんへの事前共有。背景は本人に伝えない</p></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">今回の目的</p><h2>はっきりさせたい5つ</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">本人が会社に何を求めているか</p></div></div><div class="row"><p class="no">02</p><div class="body"><p class="t">会社が求める役割を理解しているか</p></div></div><div class="row"><p class="no">03</p><div class="body"><p class="t">今の報酬に見合う責任・成果を出せていると思っているか</p></div></div><div class="row"><p class="no">04</p><div class="body"><p class="t">店長としての問題を自覚し、直す意思があるか</p></div></div><div class="row"><p class="no">05</p><div class="body"><p class="t">今後も店長として任せられる人か</p></div></div></div><p class="tag warn">不満を聞いて待遇を上げるための場ではない</p></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">進め方</p><h2>先に言わず、本音を引き出す</h2><div class="flow"><div class="step"><p class="lbl">STEP 1</p><p class="txt">本人の認識を聞く</p></div><div class="arr" style="clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%)"></div><div class="step"><p class="lbl">STEP 2</p><p class="txt">本音・希望を聞く</p></div><div class="arr" style="clip-path:polygon(0 30%,60% 30%,60% 0,100% 50%,60% 100%,60% 70%,0 70%)"></div><div class="step dk"><p class="lbl">STEP 3</p><p class="txt">会社の求める役割との差を見る</p></div></div><p class="sub">上村さんの考えは先に伝えない。差が大きければ、ポジション・報酬を改めて検討する</p></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">① 本音・報酬への不満</p><h2>今の報酬をどう思っているか</h2><div class="cols"><div class="card"><p class="lbl">聞くこと</p><p class="txt">・会社・報酬への不満は何か</p><p class="txt">・今後casaでどのポジションになりたいか</p><p class="txt">・歩合がなくなった理由をどう認識しているか</p><p class="txt">・今の報酬に業務・成果は見合っているか</p></div><div class="card dk"><p class="lbl">背景・上村さんの考え（本人には伝えない）</p><p class="txt">・歩合をなくしたのは利益回収のためではない</p><p class="txt">・現場にいなくても対応してほしいタスクを何度も伝えたが、できていなかったのが理由</p><p class="txt">・歩合を受け取るなら、最低でもりひとと同等の遂行力・責任感が必要</p></div></div></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">① 背景｜本人には伝えない</p><h2>今の条件と、これまでの配慮</h2><div class="cols"><div class="card"><p class="lbl">今の報酬条件</p><div class="numrow"><p class="num">45</p><p class="unit">万円／月（固定）</p></div><p class="txt">最低稼働 月200時間＋別途バック</p><p class="note">元は220時間。本人の「220時間は絶対働くので設定は200に」で200時間に。上村さんは合理性が分からない</p></div><div class="card hi"><p class="lbl">免除した負担（実質）</p><div class="numrow"><p class="num">2,300</p><p class="unit">万円</p></div><p class="txt">・六本木の赤字返済を免除<br>・六本木の過払い報酬 約100万円を免除</p><p class="note">上村さんが話をつけ、本人に負担させずに着地</p></div></div><p class="sub">これらを踏まえてもなお不満なら、上村さんとしては納得できない</p></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">② 働き方・スタッフ育成</p><h2>自分の分身を作れているか</h2><div class="cols"><div class="card"><p class="lbl">聞くこと</p><p class="txt">・店の利益・人員配置から見て、どの時間帯に入るべきか</p><p class="txt">・今の自分のシフトは店にとって最適か</p><p class="txt">・今後の育成・役割分担をどう考えるか</p><p class="txt">・自分がいなくても売上を作れる体制か</p></div><div class="card dk"><p class="lbl">背景・上村さんの考え（本人には伝えない）</p><p class="txt">・ようさん・たいきの締め作業に、不正の可能性が極めて高い材料が出ている（調査中）</p><p class="txt">・深夜帯の人員不足</p><p class="txt">・お客様を抱え続けず、山田などリングを打てるスタッフにつけて育てるべき</p><p class="txt">・自分の分身を作り、店全体の売上を伸ばすのが店長の役割</p></div></div></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">③ スタッフ管理・不正防止</p><h2>不正をどこまで把握していたか</h2><div class="cols"><div class="card"><p class="lbl">聞くこと</p><p class="txt">・スタッフの会計・勤務を管理できていると思うか</p><p class="txt">・不正・会計の問題をどこまで把握しているか</p><p class="txt">・認識していたなら、なぜ改善・報告しなかったか</p><p class="txt">・推薦・育成したスタッフの管理責任をどう考えるか</p><p class="txt">・今後どう管理体制を直すか</p></div><div class="card dk"><p class="lbl">背景・上村さんの考え（本人には伝えない）</p><p class="txt">・ようさんの不正を、みずきさんが実質黙認していた可能性（りひとの報告）</p><p class="txt">・例：みずきさんの支払いをようさんにPayPay送金→店の会計に計上されていない</p><p class="txt">・認識していたか、なぜ是正しなかったかを確かめたい</p><p class="txt">・不正した本人だけでなく、管理する店長にも責任がある</p></div></div></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div><div class="frame"><section class=""><div class="fit"><p class="eyebrow">④ 店長としての責任・現場対応</p><h2>現場の問題を現場で解決できているか</h2><div class="cols"><div class="card"><p class="lbl">聞くこと</p><p class="txt">・現場で解決できる問題が運営まで上がる現状をどう思うか</p><p class="txt">・店長として問題視しているか</p><p class="txt">・スタッフが運営に直接相談する理由は何だと思うか</p><p class="txt">・スタッフと信頼関係を築けているか</p><p class="txt">・現場にいない時間帯の対応をどう考えるか</p><p class="txt">・現場内で解決できる体制をどう作るか</p></div><div class="card dk"><p class="lbl">背景・上村さんの考え（本人には伝えない）</p><p class="txt">・店長が解決できる問題は現場で完結させるべき</p><p class="txt">・今は運営に頻繁に上がり、運営の手が取られている</p><p class="txt">・信頼があり適切に対応できていれば、まずみずきさんに相談するはず</p><p class="txt">・不在時間の対応が遅い。店長は現場にいる時間だけでなく店全体に責任を持つ</p></div></div></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div><div class="frame"><section class="gold"><div class="fit"><p class="eyebrow">⑤ 継続・本人の意思</p><h2>今後も店長を続けるか</h2><div class="rows"><div class="row"><p class="no">01</p><div class="body"><p class="t">今後も店長として続ける意思はあるか</p></div></div><div class="row"><p class="no">02</p><div class="body"><p class="t">希望する今後の働き方は何か</p></div></div><div class="row"><p class="no">03</p><div class="body"><p class="t">希望する役職・報酬条件は何か</p></div></div><div class="row"><p class="no">04</p><div class="body"><p class="t">会社が求める役割・責任を担う意思はあるか</p></div></div><div class="row"><p class="no">05</p><div class="body"><p class="t">今の問題点に対し、具体的に何を直せるか</p></div></div></div><p class="tag warn">本人の希望と会社の求める役割に差があれば、ポジション・報酬を再検討</p></div><p class="foot">みずきさん ヒアリング｜社外秘・やべさんのみ</p><p class="pg"></p></section></div></div>
+<div id="bar"></div>
+<div id="hud"><span id="no"></span><button id="bp" aria-label="前へ">←</button><button id="bn" aria-label="次へ">→</button><button id="bg">一覧</button><button id="bf">全画面</button></div>
+<script>
+const fr=[...document.querySelectorAll('.frame')];let i=0;
+try{const h=parseInt(location.hash.slice(1));if(h>0&&h<=fr.length)i=h-1;}catch(e){}
+function layout(){
+ const grid=document.body.classList.contains('grid');
+ fr.forEach(f=>{
+  if(grid){f.style.left=f.style.top=f.style.width=f.style.height='';const k=f.clientWidth/1920;f.firstElementChild.style.transform='scale('+k+')';return;}
+  const W=innerWidth,H=innerHeight,k=Math.min(W/1920,H/1080);
+  f.style.width=1920*k+'px';f.style.height=1080*k+'px';f.style.left=(W-1920*k)/2+'px';f.style.top=(H-1080*k)/2+'px';
+  f.firstElementChild.style.transform='scale('+k+')';});
+}
+function show(n){i=Math.max(0,Math.min(fr.length-1,n));fr.forEach((f,j)=>f.classList.toggle('on',j===i));
+ document.getElementById('no').textContent=(i+1)+' / '+fr.length;document.getElementById('bar').style.width=((i+1)/fr.length*100)+'%';
+ history.replaceState(null,'','#'+(i+1));}
+function grid(on){document.body.classList.toggle('grid',on);document.getElementById('bg').textContent=on?'発表':'一覧';layout();if(!on)show(i);}
+document.getElementById('bn').onclick=e=>{e.stopPropagation();show(i+1)};
+document.getElementById('bp').onclick=e=>{e.stopPropagation();show(i-1)};
+document.getElementById('bg').onclick=e=>{e.stopPropagation();grid(!document.body.classList.contains('grid'))};
+document.getElementById('bf').onclick=e=>{e.stopPropagation();document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();};
+fr.forEach((f,j)=>f.addEventListener('click',()=>{if(document.body.classList.contains('grid')){i=j;grid(false);}else show(i+1);}));
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(i+1)}
+ else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(i-1)}
+ else if(e.key==='Home')show(0);else if(e.key==='End')show(fr.length-1);
+ else if(e.key==='f'||e.key==='F')document.getElementById('bf').click();
+ else if(e.key==='g'||e.key==='G'||e.key==='Escape')grid(e.key==='Escape'?false:!document.body.classList.contains('grid'));});
+let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)show(i+(d<0?1:-1));tx=null;});
+addEventListener('resize',layout);layout();show(i);
+const hud=document.getElementById('hud');hud.classList.add('show');setTimeout(()=>hud.classList.remove('show'),2500);
+
+function fitAll(){document.querySelectorAll('.fit').forEach(el=>{el.style.transform='';el.style.width='';const max=el.parentElement.classList.contains('center')?824:792;const h=el.scrollHeight;if(h>max){const k=Math.max(.55,max/h);el.style.transform='scale('+k+')';el.style.width=(100/k)+'%';}});}
+fitAll();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);addEventListener('load',fitAll);
+</script></body></html>
